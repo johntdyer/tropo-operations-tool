@@ -39,7 +39,6 @@ func BuildAddressTable(papi PapiAddressResponse){
   table.Render() // Send output
 }
 
-
 func BuildUserTable(papi PapiUserResponse){
   fullName := []string{papi.FirstName, papi.LastName};
   address :=  []string{papi.Address, papi.Address2, papi.State}
@@ -73,7 +72,6 @@ func BuildUserTable(papi PapiUserResponse){
 
   table.Render() // Send output
 }
-
 
 func BuildApplicationTable(papi PapiApplicationResponse){
   data := [][]string{
