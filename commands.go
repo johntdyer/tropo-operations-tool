@@ -3,11 +3,17 @@ package main
 import (
   "os"
 	"fmt"
-  "log"
   "github.com/codegangsta/cli"
   "github.com/wsxiaoys/terminal"
   tropo "bitbucket.org/voxeolabs/go-tropo-utils"
 )
+
+// var LOGGER = logging.MustGetLogger("test")
+// logging.SetLevel(logging.ERROR, "test")
+
+// if(cli.GlobalString("debug") != "") {
+//   println("User: ", c.GlobalString("debug"))
+// }
 
 var Commands = []cli.Command{
 	commandAddressLookup,
@@ -55,15 +61,15 @@ var commandApplicationLookup = cli.Command{
 	Action: doApplicationLookup,
 }
 
-func debug(v ...interface{}) {
-	if os.Getenv("DEBUG") != "" {
-		log.Println(v...)
-	}
-}
+// func debug(v ...interface{}) {
+// 	if os.Getenv("DEBUG") != "" {
+// 		log.Println(v...)
+// 	}
+// }
 
 func assert(err error) {
 	if err != nil {
-		log.Fatal(err)
+		LOGGER.Fatal(err)
 	}
 }
 
@@ -92,8 +98,8 @@ func doAddressLookup(c *cli.Context) {
   //   fmt.Println("---------------")
   //   cli.ShowAppHelp(c)
   }else {
-    _, json := GetAddressData(user, password, url, c.String("number"))
-
+    str, json := GetAddressData(user, password, url, c.String("number"))
+    LOGGER.Debug("Address Response: ", str)
     terminal.Stdout.Color("y").Print("Results").Nl().Reset()
     BuildAddressTable(json)
   }
