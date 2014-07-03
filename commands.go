@@ -6,29 +6,38 @@ import (
   "log"
   "github.com/codegangsta/cli"
   "github.com/wsxiaoys/terminal"
+  tropo "bitbucket.org/voxeolabs/go-tropo-utils"
 )
 
 var Commands = []cli.Command{
 	commandAddressLookup,
   commandUserLookup,
   commandApplicationLookup,
+  sessionIdLookup,
+}
+
+var sessionIdLookup = cli.Command{
+  Name:  "session",
+  Usage: "tlookup sessionId 9fb9f0887171a133e4ce14025baa968e",
+  Description: `Decode runtime IP address from sessionID`,
+  Action: doSessionLookup,
 }
 
 var commandAddressLookup = cli.Command{
   Name:  "address",
-  Usage: "",
-  Description: ``,
+  Usage: "tlookup address --number +14074740214",
+  Description: `Lookup adddress data`,
   Flags: []cli.Flag {
-      cli.StringFlag{"pin, p", "", "Sip pin to lookup, eg 9995551212"},
-      cli.StringFlag{"number, n", "", "Number to lookup, Must include + and country code ( +14075551212 ) "},
-      cli.StringFlag{"token, t", "", "Address to lookup."},
+    cli.StringFlag{"pin, p", "", "Sip pin to lookup, eg 9995551212"},
+    cli.StringFlag{"number, n", "", "Number to lookup, Must include + and country code ( +14075551212 ) "},
+    cli.StringFlag{"token, t", "", "Address to lookup."},
   },
   Action: doAddressLookup,
 }
 
 var commandUserLookup = cli.Command{
   Name:  "user",
-  Usage: "",
+  Usage: "tlookup user --user jdyer",
   Description: ``,
   Flags: []cli.Flag {
     cli.StringFlag{"user, u", "", "account to lookup.  Both id & username are supported"},
@@ -38,8 +47,8 @@ var commandUserLookup = cli.Command{
 
 var commandApplicationLookup = cli.Command{
 	Name:  "application",
-	Usage: "",
-	Description: ``,
+	Usage: "tlookup application --app 123456",
+	Description: `Lookup application data `,
   Flags: []cli.Flag {
     cli.StringFlag{"app, a", "", "Application ID to lookup."},
   },
@@ -56,6 +65,11 @@ func assert(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func doSessionLookup(c *cli.Context) {
+  s := tropo.DecodeSessionId(c.Args()[0])
+  terminal.Stdout.Color("y").Print("Results: ", s.IP).Nl().Reset()
 }
 
 
