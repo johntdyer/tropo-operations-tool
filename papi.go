@@ -6,7 +6,7 @@ import (
   "io/ioutil"
   "log"
   "strings"
-  "fmt"
+
 )
 
 func GetAppData(username, passwd, url, application string) (string, PapiApplicationResponse) {
