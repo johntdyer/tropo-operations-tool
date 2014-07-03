@@ -23,7 +23,6 @@ type PapiApplicationResponse struct {
     Partition               string
 }
 
-
 type PapiUserResponse struct {
     Id   string
     Address     string
@@ -37,4 +36,22 @@ type PapiUserResponse struct {
     Status      string
     JoinDate    string
     PasswordFailedAttempts int
+}
+
+type PapiAddressResponse struct {
+    Type                string
+    Prefix              string
+    Number              string
+    DisplayNumber       string
+    ServiceId           string
+    City                string
+    State               string
+    Country             string
+    ProviderName        string
+    SmsEnabled          bool
+    ExcludeFromBilling  bool
+    SmsRateLimit        int
+    ExchangeId          int
+    ApplicationId       int
+    RequireVerification bool
 }
