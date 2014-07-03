@@ -48,7 +48,6 @@ func GetAddressData(username, passwd, url, address string) (string, PapiAddressR
   if err != nil {  panic(err.Error()) }
 
   str := string(bodyText)
-  fmt.Println(bodyText)
   return str, data
 }
 
