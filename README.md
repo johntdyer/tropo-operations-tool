@@ -17,6 +17,7 @@ Types of lookups:
     * userId
   * Applications
     * applicationId
+  * guid
 
 ## Usage
 
@@ -38,7 +39,7 @@ Types of lookups:
 
 ###### Decode sessionGUID
 
-     $ tropo session 9fb9f0887171a133e4ce14025baa968e                                          ±[master]
+     $ tropo guid 9fb9f0887171a133e4ce14025baa968e
      Results: 10.6.69.185
 
 ###### Address
