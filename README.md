@@ -44,15 +44,15 @@ Types of lookups:
 
 ###### Address
 
-    tropo address -n +15102101549
+    tropo address -n +151021012345
     Results
     +---------------------+-----------------+
     |      PROPERTY       |      VALUE      |
     +---------------------+-----------------+
     | Type                | number          |
     | Prefix              | 1510            |
-    | Number              | +15102101549    |
-    | DisplayNumber       | +1 510-210-1549 |
+    | Number              | +151021012345    |
+    | DisplayNumber       | +1 510-210-12345 |
     | ServiceId           | 5150065         |
     | City                | Crockett        |
     | State               | CA              |
