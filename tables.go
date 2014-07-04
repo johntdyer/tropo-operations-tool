@@ -7,6 +7,14 @@ import (
   "github.com/olekukonko/tablewriter"
 )
 
+func renderTable(data [][]string){
+  table := tablewriter.NewWriter(os.Stdout)
+  table.SetHeader([]string{"Property", "Value"})
+  table.AppendBulk(data)
+  table.SetAlignment(tablewriter.ALIGN_LEFT)
+  table.Render() // Send output
+}
+
 func BuildAddressTable(papi PapiAddressResponse){
 
   data := [][]string{
@@ -27,21 +35,13 @@ func BuildAddressTable(papi PapiAddressResponse){
     []string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
   }
 
-  table := tablewriter.NewWriter(os.Stdout)
-  table.SetHeader([]string{"Property", "Value"})
-
-  for _, v := range data {
-    table.Append(v)
-  }
-  table.SetAlignment(tablewriter.ALIGN_LEFT)
-
-  table.Render() // Send output
+  renderTable(data)
 }
 
-func BuildUserTable(papi PapiUserResponse){
+func BuildUserTable(papi PapiUserResponse, features []string){
   fullName := []string{papi.FirstName, papi.LastName};
-  address :=  []string{papi.Address, papi.Address2, papi.State}
-  notes := ""
+  address  := []string{papi.Address, papi.Address2, papi.State}
+  notes    := ""
 
   if papi.Notes == "" {
     notes = "none"
@@ -61,15 +61,7 @@ func BuildUserTable(papi PapiUserResponse){
     []string{"PasswordFailedAttempts",  strconv.Itoa(papi.PasswordFailedAttempts)},
   }
 
-  table := tablewriter.NewWriter(os.Stdout)
-  table.SetHeader([]string{"Property", "Value"})
-
-  for _, v := range data {
-    table.Append(v)
-  }
-  table.SetAlignment(tablewriter.ALIGN_LEFT)
-
-  table.Render() // Send output
+  renderTable(data)
 }
 
 func BuildApplicationTable(papi PapiApplicationResponse){
@@ -83,13 +75,7 @@ func BuildApplicationTable(papi PapiApplicationResponse){
     []string{"VoiceUrl",      papi.VoiceUrl},
     []string{"Partition",     papi.Partition},
   }
-  table := tablewriter.NewWriter(os.Stdout)
-  table.SetHeader([]string{"Property", "Value"})
 
-  for _, v := range data {
-    table.Append(v)
-  }
-  table.SetAlignment(tablewriter.ALIGN_LEFT)
-  table.Render() // Send output
+  renderTable(data)
 }
 
