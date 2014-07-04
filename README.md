@@ -36,6 +36,11 @@ Types of lookups:
 
 ##### Lookup data
 
+###### Decode sessionGUID
+
+     $ tropo session 9fb9f0887171a133e4ce14025baa968e                                          ±[master]
+     Results: 10.6.69.185
+
 ###### Address
 
     tropo address -n +15102101549
