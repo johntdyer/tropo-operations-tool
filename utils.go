@@ -4,8 +4,10 @@ import(
   "fmt"
   "os"
   "time"
+  "strconv"
   "code.google.com/p/gcfg"
   "github.com/wsxiaoys/terminal"
+  "github.com/op/go-logging"
 )
 
 // Tries to find out when this binary was compiled.
@@ -34,4 +36,18 @@ func GetPapiConfig() (string, string, string){
     os.Exit(1)
   }
   return cfg.Credentials.Username, cfg.Credentials.Password, cfg.Api.Url
+}
+
+func SetLoggerLevel(raw_debug string){
+  // Debug mode
+  if raw_debug != "" {
+    debug_mode, err := strconv.ParseBool(raw_debug)
+    if err != nil {
+      logger.Fatal(err)
+    }
+
+    if debug_mode {
+      logging.SetLevel(logging.DEBUG,"tropo")
+    }
+  }
 }

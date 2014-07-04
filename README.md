@@ -1,4 +1,4 @@
-tlookup
+tropo
 
 ====
 
@@ -38,7 +38,7 @@ Types of lookups:
 
 ###### Address
 
-    tlookup address -n +15102101549
+    tropo address -n +15102101549
     Results
     +---------------------+-----------------+
     |      PROPERTY       |      VALUE      |
@@ -62,7 +62,7 @@ Types of lookups:
 
 ###### User
 
-    tlookup user -u jdyer
+    tropo user -u jdyer
     Results
     +------------------------+--------------------------------+
     |        PROPERTY        |             VALUE              |
@@ -81,7 +81,7 @@ Types of lookups:
 
 ###### Application
 
-    $ tlookup application -a 5032272
+    $ tropo application -a 5032272
     Results
     +--------------+--------------------------------------------------------------------+
     |   PROPERTY   |                               VALUE                                |

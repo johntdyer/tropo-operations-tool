@@ -25,7 +25,6 @@ func BuildAddressTable(papi PapiAddressResponse){
     []string{"ExchangeId",          strconv.Itoa(papi.ExchangeId)},
     []string{"ApplicationId",       strconv.Itoa(papi.ApplicationId)},
     []string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
-
   }
 
   table := tablewriter.NewWriter(os.Stdout)

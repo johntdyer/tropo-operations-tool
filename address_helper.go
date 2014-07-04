@@ -16,7 +16,7 @@ func testinf(){
 
 func AddressCleaner(address string) string {
   addr := strings.TrimPrefix(strings.Split(address,"@")[0],"tel:")
-  LOGGER.Debug("Sanitized address: %s", addr)
+  logger.Debug("Sanitized address: %s", addr)
   return addr
 }
 
