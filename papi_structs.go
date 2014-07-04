@@ -55,3 +55,8 @@ type PapiAddressResponse struct {
     ApplicationId       int
     RequireVerification bool
 }
+
+type PapiFeaturesResponse []struct  {
+    FeatureName string `json:"featureName"`
+    FeatureFlag string `json:"featureFlag"`
+}

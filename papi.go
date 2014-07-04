@@ -71,3 +71,25 @@ func GetUserData(username, password, apiUrl, accountName string) (string, PapiUs
   return str, data
 }
 
+
+func GetUserFeatures(username, password, apiUrl, accountName string) []string {
+
+  fullApiUrl := []string{apiUrl, "/users/", accountName, "/features"};
+  bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+
+  var data PapiFeaturesResponse
+  err = json.Unmarshal(bodyText, &data)
+
+
+  if err != nil {
+    panic(err.Error())
+  }
+
+  str := []string{}
+  for _, v := range data {
+    str = append(str,v.FeatureFlag)
+  }
+
+  //str := string(bodyText)
+  return str
+}

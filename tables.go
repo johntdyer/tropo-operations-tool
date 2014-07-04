@@ -59,6 +59,7 @@ func BuildUserTable(papi PapiUserResponse, features []string){
     []string{"Status",                  papi.Status},
     []string{"Notes",                   notes},
     []string{"PasswordFailedAttempts",  strconv.Itoa(papi.PasswordFailedAttempts)},
+    []string{"Feature Flags",                strings.Join(features, ",")},
   }
 
   renderTable(data)

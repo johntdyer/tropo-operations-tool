@@ -99,10 +99,14 @@ func doUserLookup(c *cli.Context) {
     fmt.Println("---------------")
     cli.ShowAppHelp(c)
   }else {
-    str, json := GetUserData(user, password, url, c.String("user"))
+
+    features := []string{}
+
+    str, userData := GetUserData(user, password, url, c.String("user"))
+    features = GetUserFeatures(user, password, url, c.String("user"))
     var _ = str
     terminal.Stdout.Color("y").Print("Results").Nl().Reset()
-    BuildUserTable(json)
+    BuildUserTable(userData,features)
   }
 }
 
