@@ -15,7 +15,7 @@ var Commands = []cli.Command{
 }
 
 var sessionIdLookup = cli.Command{
-  Name:  "session, s",
+  Name:  "session",
   Usage: "tropo sessionId 9fb9f0887171a133e4ce14025baa968e",
   Description: `Decode runtime IP address from sessionID`,
   Action: doSessionLookup,
