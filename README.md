@@ -39,6 +39,24 @@ Types of lookups:
 
 ##### Lookup data
 
+
+###### Lookup Features
+
+    $ tropo list features                                                                                                                                                                                                                             ±[●][master]
+    +----------+------------------------------+
+    | PROPERTY |            VALUE             |
+    +----------+------------------------------+
+    | s        | Outbound SIP                 |
+    | b        | SIP Bang Syntax              |
+    | c        | Override Caller id           |
+    | w        | International Outbound SMS   |
+    | i        | International Outbound Voice |
+    | u        | Domestic Outbound Voice      |
+    | d        | Domestic Outbound SMS        |
+    | r        | SIP REFER                    |
+    | x        | Disabled Account             |
+    +----------+------------------------------+
+
 ###### Decode sessionGUID
 
      $ tropo guid 9fb9f0887171a133e4ce14025baa968e
@@ -46,7 +64,7 @@ Types of lookups:
 
 ###### Address
 
-    tropo address -n +151021012345
+    tropo lookup address +14433058696
     Results
     +---------------------+-----------------+
     |      PROPERTY       |      VALUE      |
@@ -70,7 +88,7 @@ Types of lookups:
 
 ###### User
 
-    tropo user -u jdyer
+    tropo lookup user jdyer
     Results
     +------------------------+--------------------------------+
     |        PROPERTY        |             VALUE              |
@@ -89,7 +107,7 @@ Types of lookups:
 
 ###### Application
 
-    $ tropo application -a 5032272
+    $ tropo lookup application 5032272
     Results
     +--------------+--------------------------------------------------------------------+
     |   PROPERTY   |                               VALUE                                |
