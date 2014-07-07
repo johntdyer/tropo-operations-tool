@@ -9,6 +9,7 @@ var Commands = []cli.Command{
   commandUserLookup,
   commandApplicationLookup,
   sessionIdLookup,
+  list,
 }
 
 var sessionIdLookup = cli.Command{

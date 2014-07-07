@@ -15,6 +15,21 @@ func renderTable(data [][]string){
   table.Render() // Send output
 }
 
+func BuildFeaturesTable(){
+    data := [][]string{
+    []string{"s",        "Outbound SIP"},
+    []string{"b",        "SIP Bang Syntax"},
+    []string{"c",        "Override Caller id"},
+    []string{"w",        "International Outbound SMS"},
+    []string{"i",        "International Outbound Voice"},
+    []string{"u",        "Domestic Outbound Voice"},
+    []string{"d",        "Domestic Outbound SMS"},
+    []string{"r",        "SIP REFER"},
+    []string{"x",        "Disabled Account"},
+  }
+  renderTable(data)
+}
+
 func BuildAddressTable(papi PapiAddressResponse){
 
   data := [][]string{
@@ -59,7 +74,7 @@ func BuildUserTable(papi PapiUserResponse, features []string){
     []string{"Status",                  papi.Status},
     []string{"Notes",                   notes},
     []string{"PasswordFailedAttempts",  strconv.Itoa(papi.PasswordFailedAttempts)},
-    []string{"Feature Flags",                strings.Join(features, ",")},
+    []string{"Feature Flags",           strings.Join(features, ",")},
   }
 
   renderTable(data)
