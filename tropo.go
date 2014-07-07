@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var user, password, rest_api = GetPapiConfig()
+
 var logger = logging.MustGetLogger("tropo")
 
 func main() {
