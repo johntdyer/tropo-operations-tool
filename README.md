@@ -23,15 +23,45 @@ Types of lookups:
 
 #### Create config file
 
-    [api]
-    url = https://api.aws.tropo.com/rest/v1
-    [credentials]
-    username = jdyer
-    password = abc123
+    ; Default api-config
+    ; https://github.com/robfig/config
+    [DEFAULT]
+    host: api.aws.tropo.com
+    route: /rest/v1
+    protocol: https://
+    base-url: %(protocol)s%(host)s%(route)s
+
+    [hosted]
+    url: %(base-url)s
+    username: username
+    password: abc123
 
 ##### Install Application
 
     go install
+
+##### Rule the world
+
+    $ tropo -h                                                                                                                                                                                                                          ±[●][master]
+    NAME:
+       tropo - kicking ass and taking names
+
+    USAGE:
+       tropo [global options] command [command options] [arguments...]
+
+    VERSION:
+       0.1.0
+
+    COMMANDS:
+       guid     tropo guid 9fb9f0887171a133e4ce14025baa968e
+       list     tropo list features
+       lookup   tropo lookup 9fb9f0887171a133e4ce14025baa968e
+       help, h  Shows a list of commands or help for one command
+
+    GLOBAL OPTIONS:
+       --version, -v    print the version
+       --help, -h       show help
+
 
 ### To do
 
@@ -50,7 +80,7 @@ Types of lookups:
     | b        | SIP Bang Syntax              |
     | c        | Override Caller id           |
     | w        | International Outbound SMS   |
-    | i        | International Outbound Voice |
+    | i        | Internation    al Outbound Voice |
     | u        | Domestic Outbound Voice      |
     | d        | Domestic Outbound SMS        |
     | r        | SIP REFER                    |
