@@ -76,6 +76,7 @@ type ApplicationAddresses []struct {
   Number              string
   Channel             string
   Address             string
+  Token               string
   DisplayNumber       string
   ServiceId           string
   City                string
