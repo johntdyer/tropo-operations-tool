@@ -57,6 +57,16 @@ type PapiAddressResponse struct {
 }
 
 type PapiFeaturesResponse []struct  {
-    FeatureName string `json:"featureName"`
-    FeatureFlag string `json:"featureFlag"`
+  Href        string `json:"href"`
+  Feature     string `json:"feature"`
+  FeatureName string `json:"featureName"`
+  FeatureFlag string `json:"featureFlag"`
+}
+
+type FeaturesList []struct {
+  Href        string
+  Id          string
+  Name        string
+  Description string
+}
 }
