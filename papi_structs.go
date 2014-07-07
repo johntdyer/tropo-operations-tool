@@ -69,4 +69,40 @@ type FeaturesList []struct {
   Name        string
   Description string
 }
+
+type ApplicationAddresses []struct {
+  Type                string
+  Prefix              string
+  Number              string
+  Channel             string
+  Address             string
+  DisplayNumber       string
+  ServiceId           string
+  City                string
+  State               string
+  Country             string
+  ProviderName        string
+  SmsEnabled          bool
+  ExcludeFromBilling  bool
+  SmsRateLimit        int
+  ExchangeId          int
+  ApplicationId       int
+  RequireVerification bool
+}
+
+type Applications []struct {
+  Href                        string
+  Id                          string
+  Name                        string
+  Platform                    string
+  VoiceEnvironmentId          string
+  VoiceUrl                    string
+  MessagingEnvironmentId      string
+  MessagingUrl                string
+  Environment                 string
+  EventNotificationEnabled    bool
+  ResultNotificationEnabled   bool
+  UserId                      int
+  User                        string
+  Partition                   string
 }
