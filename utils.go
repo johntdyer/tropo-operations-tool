@@ -38,6 +38,14 @@ func GetPapiConfig() (string, string, string){
   return cfg.Credentials.Username, cfg.Credentials.Password, cfg.Api.Url
 }
 
+func CheckForRequiredArguments(arg, msg string){
+  if arg == "" {
+    terminal.Stdout.Color("r").Print("-- ERROR -- Missing argument").Nl().Reset()
+    terminal.Stdout.Color("b").Print("  Example: \n    tropo %s", msg).Nl().Reset()
+    os.Exit(0)
+  }
+}
+
 func SetLoggerLevel(raw_debug string){
   // Debug mode
   if raw_debug != "" {
