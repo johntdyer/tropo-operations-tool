@@ -48,7 +48,8 @@ func GetAppData(username, password, url, application string) (string, PapiApplic
 }
 
 func GetAddressData(username, password, url, address string) (string, PapiAddressResponse) {
-	fullApiUrl := []string{url, "/addresses/number/", address}
+
+	fullApiUrl := []string{url, "/addresses/", AddressType(address), "/", address}
 	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
 
 	var data PapiAddressResponse
