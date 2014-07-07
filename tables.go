@@ -1,6 +1,7 @@
 package main
 
 import (
+  "fmt"
   "os"
   "strings"
   "strconv"
@@ -51,6 +52,52 @@ func BuildAddressTable(papi PapiAddressResponse){
   }
 
   renderTable(data)
+}
+
+func BuildApplicationsTable(apps Applications){
+  table := tablewriter.NewWriter(os.Stdout)
+  table.SetHeader([]string{"ID", "Name", "  Environment  ", "VoiceURL"})
+  table.SetRowSeparator("-")
+  table.SetRowLine(true)
+  //table.SetColWidth(200)
+  table.SetAlignment(tablewriter.ALIGN_LEFT)
+  for _, v := range apps {
+    ppids := fmt.Sprintf("v: %s - m: %s", v.VoiceEnvironmentId, v.MessagingEnvironmentId)
+    table.Append([]string{
+      v.Id,
+      v.Name,
+      ppids,
+      strings.Join([]string{v.VoiceUrl,v.MessagingUrl}, "\n"),
+    });
+
+  }
+  table.Render() // Send output
+}
+
+func BuildApplicationAddressesTable(addresses ApplicationAddresses){
+
+  table := tablewriter.NewWriter(os.Stdout)
+  table.SetHeader([]string{"Type", "Address", "Channel", "ServiceID"})
+  table.SetAlignment(tablewriter.ALIGN_LEFT)
+
+  for _, v := range addresses {
+    address := ""
+    channel := ""
+    switch {
+      case v.Address != "" : address = v.Address
+      case v.Number  != "" : address = v.Number
+      case v.Token   != "" : address = v.Token
+    }
+
+    if v.Type == "sip" ||  v.Type == "number" {
+      channel = "voice"
+    } else{
+      channel =v.Channel
+    }
+
+    table.Append([]string{v.Type, address, channel,v.ServiceId});
+  }
+  table.Render() // Send output
 }
 
 func BuildUserTable(papi PapiUserResponse, features []string){

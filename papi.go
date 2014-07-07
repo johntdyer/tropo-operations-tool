@@ -71,6 +71,20 @@ func GetUserData(username, password, apiUrl, accountName string) (string, PapiUs
   return str, data
 }
 
+func GetApplicationAddresses(username, password, apiUrl, application string) ApplicationAddresses {
+	logger.Debug("Looking up addresses for applications - %s", application)
+	fullApiUrl := []string{apiUrl, "/applications/", string(application), "/addresses"}
+	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+
+	var data ApplicationAddresses
+	err = json.Unmarshal(bodyText, &data)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return data
+}
 
 func GetUserFeatures(username, password, apiUrl, accountName string) []string {
 
