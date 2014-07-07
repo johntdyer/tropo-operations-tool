@@ -79,4 +79,10 @@ var list = cli.Command{
       Action: PrintFeatures,
     },
   },
+		{
+			Name:   "ppids",
+			Usage:  "List all PPIDs",
+			Action: PrintPpids,
+		},
+	},
 }

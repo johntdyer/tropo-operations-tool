@@ -29,6 +29,41 @@ func BuildFeaturesTable(){
     []string{"x",        "Disabled Account"},
   }
   renderTable(data)
+func BuildPpidsTable() {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Name", "ppid"})
+	table.SetRowSeparator("-")
+	table.SetColWidth(200)
+	data := [][]string{
+		[]string{"Orlando Staging Voice", "410"},
+		[]string{"Orlando Staging Messaging", "445"},
+		[]string{"Production Voice", "461"},
+		[]string{"Production Messaging", "462"},
+		[]string{"Alpha environment ", "502"},
+		[]string{"Vegas Production Voice", "653"},
+		[]string{"Vegas Production Messaging", "654"},
+		[]string{"outlook Production Voice", "655"},
+		[]string{"Outlook Production Messaging", "656"},
+		[]string{"Multisite - Tropo", "663"},
+		[]string{"Multisite - Tropo w/ SMS", "664"},
+		[]string{"Orlando FiServ Voice", "832"},
+		[]string{"Orlando FiServ Messaging", "833"},
+		[]string{"Las Vegas OPower Voice", "947"},
+		[]string{"Las Vegas OPower Messaging", "948"},
+		[]string{"Orlando Fallback Voice", "1070"},
+		[]string{"Orlando Fallback Messaging", "1071"},
+		[]string{"Orlando oPower Voice", "1072"},
+		[]string{"Orlando oPower Messaging", "1073"},
+		[]string{"ORL - Tropo w/ SMS, New TropoGateway BETA", "1121"},
+		[]string{"LAS - Tropo w/ SMS, New TropoGateway BETA", "1120"},
+		[]string{"Vegas FiServ Voice", "1122"},
+		[]string{"Vegas FiServ Messaging", "1123"},
+	}
+	table.AppendBulk(data)
+
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.Render() // Send output
+
 }
 
 func BuildAddressTable(papi PapiAddressResponse){
