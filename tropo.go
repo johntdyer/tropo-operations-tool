@@ -22,10 +22,6 @@ func main() {
 	app.Compiled = CompileTime()
 	app.Commands = Commands
 
-	app.Flags = []cli.Flag {
-    cli.BoolFlag{"debug, d", "Run in debug mode"},
-  }
-
 	SetLoggerLevel(os.Getenv("DEBUG_MODE"))
 
   logger.Debug("Starting application ")
