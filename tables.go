@@ -18,33 +18,33 @@ func renderTable(data [][]string) {
 
 func BuildPpidsTable() {
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Name", "ppid"})
+	table.SetHeader([]string{"Name", "ppid", "Environment"})
 	table.SetRowSeparator("-")
 	table.SetColWidth(200)
 	data := [][]string{
-		[]string{"Orlando Staging Voice", "410"},
-		[]string{"Orlando Staging Messaging", "445"},
-		[]string{"Production Voice", "461"},
-		[]string{"Production Messaging", "462"},
-		[]string{"Alpha environment ", "502"},
-		[]string{"Vegas Production Voice", "653"},
-		[]string{"Vegas Production Messaging", "654"},
-		[]string{"outlook Production Voice", "655"},
-		[]string{"Outlook Production Messaging", "656"},
-		[]string{"Multisite - Tropo", "663"},
-		[]string{"Multisite - Tropo w/ SMS", "664"},
-		[]string{"Orlando FiServ Voice", "832"},
-		[]string{"Orlando FiServ Messaging", "833"},
-		[]string{"Las Vegas OPower Voice", "947"},
-		[]string{"Las Vegas OPower Messaging", "948"},
-		[]string{"Orlando Fallback Voice", "1070"},
-		[]string{"Orlando Fallback Messaging", "1071"},
-		[]string{"Orlando oPower Voice", "1072"},
-		[]string{"Orlando oPower Messaging", "1073"},
-		[]string{"ORL - Tropo w/ SMS, New TropoGateway BETA", "1121"},
-		[]string{"LAS - Tropo w/ SMS, New TropoGateway BETA", "1120"},
-		[]string{"Vegas FiServ Voice", "1122"},
-		[]string{"Vegas FiServ Messaging", "1123"},
+		[]string{"Orlando Staging Voice", "410", "Staging"},
+		[]string{"Orlando Staging Messaging", "445", "Staging"},
+		[]string{"Alpha environment ", "502", "Alpha"},
+		[]string{"Production Voice", "461", "Shared Production"},
+		[]string{"Production Messaging", "462", "Shared Production"},
+		[]string{"Vegas Production Voice", "653", "Shared Production"},
+		[]string{"Vegas Production Messaging", "654", "Shared Production"},
+		[]string{"outlook Production Voice", "655", "Dedicated Production"},
+		[]string{"Outlook Production Messaging", "656", "Dedicated Production"},
+		[]string{"Multisite - Tropo", "663", "Shared Production"},
+		[]string{"Multisite - Tropo w/ SMS", "664", "Shared Production"},
+		[]string{"Orlando FiServ Voice", "832", "Dedicated Production"},
+		[]string{"Orlando FiServ Messaging", "833", "Dedicated Production"},
+		[]string{"Las Vegas OPower Voice", "947", "Dedicated Production"},
+		[]string{"Las Vegas OPower Messaging", "948", "Dedicated Production"},
+		[]string{"Orlando Fallback Voice", "1070", "Shared Production"},
+		[]string{"Orlando Fallback Messaging", "1071", "Shared Production"},
+		[]string{"Orlando oPower Voice", "1072", "Dedicated Production"},
+		[]string{"Orlando oPower Messaging", "1073", "Dedicated Production"},
+		[]string{"ORL - Tropo w/ SMS, New TropoGateway BETA", "1121", "Alpha"},
+		[]string{"LAS - Tropo w/ SMS, New TropoGateway BETA", "1120", "Alpha"},
+		[]string{"Vegas FiServ Voice", "1122", "Dedicated Production"},
+		[]string{"Vegas FiServ Messaging", "1123", "Dedicated Production"},
 	}
 	table.AppendBulk(data)
 
