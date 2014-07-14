@@ -9,6 +9,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -87,9 +88,19 @@ func GetPapiConfig() (string, string, string) {
 			os.Exit(1)
 		}
 
+		if url == "" {
+			terminal.Stdout.Color("r").Print("-- ERROR -- URL is required but was not found in config").Nl().Reset()
+			os.Exit(1)
+		}
+
 		user, _ := c.String(section, "username")
 		if err != nil {
 			logger.Fatal(err)
+			os.Exit(1)
+		}
+
+		if user == "" {
+			terminal.Stdout.Color("r").Print("-- ERROR -- Username is required but was not found in config").Nl().Reset()
 			os.Exit(1)
 		}
 
@@ -98,6 +109,12 @@ func GetPapiConfig() (string, string, string) {
 			logger.Fatal(err)
 			os.Exit(1)
 		}
+
+		if pass == "" {
+			terminal.Stdout.Color("r").Print("-- ERROR -- Password is required but was not found in config").Nl().Reset()
+			os.Exit(1)
+		}
+
 		return user, pass, url
 	} else {
 		logger.Fatal("Unable to find section [ ", section, " ]")
@@ -106,6 +123,9 @@ func GetPapiConfig() (string, string, string) {
 	return user, pass, url
 }
 
+func RemoveNewLines(str, replace string) string {
+	return strings.Replace(strings.Replace(str, "\r", replace, -1), "\n", replace, -1)
+}
 func CheckForRequiredArguments(arg, msg string) {
 	if arg == "" {
 		terminal.Stdout.Color("r").Print("-- ERROR -- Missing argument").Nl().Reset()

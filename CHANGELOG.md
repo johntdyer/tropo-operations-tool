@@ -1,6 +1,7 @@
 ## 0.1.3
 
 - Handle long account notes
+- Better error when missing config data
 
 ## 0.1.2
 
