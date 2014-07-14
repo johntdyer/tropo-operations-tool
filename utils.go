@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/config"
 	"github.com/wsxiaoys/terminal"
 	"os"
+	"runtime"
 	"strconv"
 	"time"
 )
@@ -19,6 +20,17 @@ func CompileTime() time.Time {
 		return time.Now()
 	}
 	return info.ModTime()
+}
+
+func UserHomeDir() string {
+	if runtime.GOOS == "windows" {
+		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		return home
+	}
+	return os.Getenv("HOME")
 }
 
 // type argError struct {
@@ -36,7 +48,8 @@ func CompileTime() time.Time {
 // }
 
 func printError() {
-	terminal.Stdout.Color("r").Print("ERROR - Unable to locate api configuration ( ~/.tropo-api.cfg ).\n").Nl().Reset()
+	home := fmt.Sprintf("ERROR - Unable to locate api configuration ( %s/.tropo-api.cfg ).\n", UserHomeDir())
+	terminal.Stdout.Color("r").Print(home).Nl().Reset()
 	fmt.Println("Please create this file in your home directory")
 	terminal.Stdout.Color("b").Print("---------------------------------\n").Nl().Reset()
 	//fmt.Println("   ;Tropo API Configuration\n   [api]\n   url = https://api.aws.tropo.com/rest/v1/users\n   [credentials]\n   username = <username>\n   password = <password>\n")
@@ -60,7 +73,7 @@ func GetPapiConfig() (string, string, string) {
 	section := "hosted"
 	var user, pass, url string
 
-	c, err := config.ReadDefault("/Users/jdyer/.tropo-api.cfg")
+	c, err := config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", UserHomeDir()))
 	if err != nil {
 		printError()
 		os.Exit(1)
