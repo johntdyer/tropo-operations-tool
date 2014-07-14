@@ -143,13 +143,6 @@ func BuildApplicationAddressesTable(addresses ApplicationAddresses) {
 func BuildUserTable(papi PapiUserResponse, features []string) {
 	fullName := []string{papi.FirstName, papi.LastName}
 	address := []string{papi.Address, papi.Address2, papi.State}
-	notes := ""
-
-	if papi.Notes == "" {
-		notes = "none"
-	} else {
-		notes = papi.Notes
-	}
 
 	data := [][]string{
 		[]string{"Username", papi.Username},
@@ -159,12 +152,21 @@ func BuildUserTable(papi PapiUserResponse, features []string) {
 		[]string{"Address", strings.Join(address, "\n")},
 		[]string{"JoinDate", papi.JoinDate},
 		[]string{"Status", papi.Status},
-		[]string{"Notes", notes},
 		[]string{"PasswordFailedAttempts", strconv.Itoa(papi.PasswordFailedAttempts)},
 		[]string{"Feature Flags", strings.Join(features, ",")},
 	}
 
 	renderTable(data)
+
+	if papi.Notes != "" {
+		clean_response := RemoveNewLines(papi.Notes, " ") //, "\r", " ", -1), "\n", " ", -1)
+
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{"Notes"})
+		table.SetAlignment(tablewriter.ALIGN_LEFT)
+		table.Append([]string{clean_response})
+		table.Render() // Send output
+	}
 }
 
 func BuildApplicationTable(papi PapiApplicationResponse) {

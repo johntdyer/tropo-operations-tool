@@ -18,10 +18,13 @@ func provisioningApiRequest(u, p, url string) ([]byte, error) {
 	}
 
 	bodyText, err := ioutil.ReadAll(resp.Body)
+
 	clean_response := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
+
 	logger.Debug("URL: %s || Response: %s [ code: %d ]", url, clean_response, resp.StatusCode)
 
 	if err != nil {
+		logger.Error("provisioningApiRequest PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 
@@ -29,6 +32,9 @@ func provisioningApiRequest(u, p, url string) ([]byte, error) {
 		logger.Fatal("Not found")
 	}
 
+	if resp.StatusCode == 401 {
+		logger.Fatal("Authentication error")
+	}
 	return bodyText, err
 }
 
@@ -40,6 +46,7 @@ func GetAppData(username, password, url, application string) (string, PapiApplic
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
+		logger.Error("GetAppData PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 
@@ -56,6 +63,7 @@ func GetAddressData(username, password, url, address string) (string, PapiAddres
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
+		logger.Error("GetAddressData PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 
@@ -67,11 +75,12 @@ func GetUserData(username, password, apiUrl, accountName string) (string, PapiUs
 	logger.Debug("Looking up user - %s", accountName)
 	fullApiUrl := []string{apiUrl, "/users/", string(accountName)}
 	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
-
+	logger.Debug("PAPI Response: %s", bodyText)
 	var data PapiUserResponse
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
+		logger.Error("GetUserData PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 
@@ -88,6 +97,7 @@ func GetUsersApplications(username, password, apiUrl, accountName string) Applic
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
+		logger.Error("GetUsersApplications PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 
@@ -103,6 +113,7 @@ func GetApplicationAddresses(username, password, apiUrl, application string) App
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
+		logger.Error("GetApplicationAddresses PAPI Response: %s", bodyText)
 		panic(err.Error())
 	}
 

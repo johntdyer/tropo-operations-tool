@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Handle long account notes
+
 ## 0.1.2
 
 - Find users home directory for locating config file

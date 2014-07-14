@@ -66,6 +66,7 @@ Types of lookups:
 ### To do
 
 * Support multiple API's
+* Handle auth errors better, currently its a giant stacktrace
 
 ##### Lookup data
 
