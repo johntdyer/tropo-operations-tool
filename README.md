@@ -67,7 +67,7 @@ Types of lookups:
 
 * Support multiple API's
 * Handle auth errors better, currently its a giant stacktrace
-
+* Add payment info https://api.aws.tropo.com/rest/v1/users/jdyer/payment/method
 ##### Lookup data
 
 

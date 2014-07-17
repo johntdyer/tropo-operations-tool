@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"code.google.com/p/gcfg"
 	"fmt"
 	"github.com/op/go-logging"
 	"github.com/robfig/config"
@@ -34,50 +33,15 @@ func UserHomeDir() string {
 	return os.Getenv("HOME")
 }
 
-// type argError struct {
-//     arg  int
-//     prob string
-// }
-
-// func ValidateConfig(cfg Config) (int, error){
-//   if cfg.Credentials.Username == ""{
-//     return 1, &argError{1, "Can't display record"}
-//   }
-//   //if cfg.Credentials.Password == nil
-//   //if cfg.Api.Url == nil
-//   return 1, nil
-// }
-
-func printError() {
-	home := fmt.Sprintf("ERROR - Unable to locate api configuration ( %s/.tropo-api.cfg ).\n", UserHomeDir())
-	terminal.Stdout.Color("r").Print(home).Nl().Reset()
-	fmt.Println("Please create this file in your home directory")
-	terminal.Stdout.Color("b").Print("---------------------------------\n").Nl().Reset()
-	//fmt.Println("   ;Tropo API Configuration\n   [api]\n   url = https://api.aws.tropo.com/rest/v1/users\n   [credentials]\n   username = <username>\n   password = <password>\n")
-	fmt.Println("   ; Default api-config\n   ; https://github.com/robfig/config\n   [DEFAULT]\n   host: api.aws.tropo.com\n   route: /rest/v1\n   protocol: https://\n   base-url: %(protocol)s%(host)s%(route)s\n   \n   [hosted]\n   url: %(base-url)s\n   username: <username>\n   password: <password>\n")
-	terminal.Stdout.Color("b").Print("---------------------------------\n").Nl().Reset()
-}
-
-// func GetPapiConfig() (string, string, string) {
-// 	var cfg Config
-// 	err := gcfg.ReadFileInto(&cfg, "/Users/jdyer/.tropo-api.gcfg")
-// 	if err != nil {
-// 		printError()
-// 		os.Exit(1)
-// 	}
-// 	//ValidateConfig(cfg)
-
-// 	return cfg.Credentials.Username, cfg.Credentials.Password, cfg.Api.Url
-// }
-
 func GetPapiConfig() (string, string, string) {
 	section := "hosted"
 	var user, pass, url string
 
 	c, err := config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", UserHomeDir()))
 	if err != nil {
-		printError()
-		os.Exit(1)
+		PrintError()
+		CreateConfig()
+		return GetPapiConfig()
 	}
 
 	if c.HasSection(section) {
