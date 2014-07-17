@@ -38,7 +38,9 @@ Types of lookups:
 
 ##### Install Application
 
-    go install
+    sudo wget https://github.com/johntdyer/tropo/releases/download/v0.2.1/tropo -O /bin/tropo
+    chmod +x /bin/tropo
+    tropo
 
 ##### Rule the world
 
