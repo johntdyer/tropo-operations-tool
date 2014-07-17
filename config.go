@@ -38,6 +38,7 @@ func CreateConfig() {
 
 	c.AddSection("DEFAULT")
 	c.AddOption("DEFAULT", "host", host)
+	c.AddOption("DEFAULT", "InsecureSkipVerify", "false")
 	c.AddOption("DEFAULT", "route", route)
 	c.AddOption("DEFAULT", "protocol", protocol)
 	c.AddOption("DEFAULT", "base-url", "%(protocol)s%(host)s%(route)s")
@@ -84,10 +85,10 @@ func askUserForData(msg, default_value string) string {
 	return str
 }
 
-func GetPapiConfig(section string) (string, string, string) {
+func GetPapiConfig(section string) (string, string, string, bool) {
 	//section := "hosted"
 	var username, password, url string
-
+	var InsecureSkipVerify bool
 	cfg, err := config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", UserHomeDir()))
 	if err != nil {
 		PrintError()
@@ -100,13 +101,13 @@ func GetPapiConfig(section string) (string, string, string) {
 		password := validateConfig(cfg, section, "password")
 		username := validateConfig(cfg, section, "username")
 		url := validateConfig(cfg, section, "url")
-
-		return username, password, url
+		InsecureSkipVerify, _ := cfg.Bool(section, "InsecureSkipVerify")
+		return username, password, url, InsecureSkipVerify
 	} else {
 		logger.Fatal("Unable to find section [ ", section, " ]")
 		os.Exit(1)
 	}
-	return username, password, url
+	return username, password, url, InsecureSkipVerify
 
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -8,7 +9,11 @@ import (
 )
 
 func provisioningApiRequest(u, p, url string) ([]byte, error) {
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: InsecureSkipVerify},
+	}
+
+	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest("GET", url, nil)
 	req.SetBasicAuth(u, p)
 

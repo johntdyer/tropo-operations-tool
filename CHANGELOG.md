@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Abiltiy to skip ssl verification per host, disabled by default
+
 ## 0.2.0
 
 - Auto generate config if missing

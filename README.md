@@ -152,6 +152,36 @@ Types of lookups:
     | Partition    | production                                                         |
     +--------------+--------------------------------------------------------------------+
 
+### Multi-tennancy
+
+#### Config
+
+    [DEFAULT]
+    host: api.aws.tropo.com
+    route: /rest/v1
+    protocol: https://
+    base-url: %(protocol)s%(host)s%(route)s
+
+    [hosted]
+    url: %(base-url)s
+    username: jdyer
+    password: abc
+
+    [customer1]
+    url: %(protocol)sapi2..tropo.com%(route)s
+    username: jdyer
+    password: abc
+
+    [customer2]
+    url: %(protocol)sapi3..tropo.com%(route)s
+    username: jdyer
+    password: abc
+
+##### Disable SSL validation
+
+Simply add the following at the global level, or per backend
+
+     InsecureSkipVerify: true
 ## Author
 
 [John Dyer]()

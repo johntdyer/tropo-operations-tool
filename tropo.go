@@ -8,6 +8,7 @@ import (
 )
 
 var user, password, rest_api string
+var InsecureSkipVerify = false
 
 var logger = logging.MustGetLogger("tropo")
 
@@ -28,7 +29,7 @@ func main() {
 
 	app.Before = func(c *cli.Context) error {
 		str := fmt.Sprintf("%s", c.String("config"))
-		user, password, rest_api = GetPapiConfig(str)
+		user, password, rest_api, InsecureSkipVerify = GetPapiConfig(str)
 		return nil
 	}
 
