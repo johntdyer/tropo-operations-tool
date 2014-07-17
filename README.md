@@ -42,15 +42,14 @@ Types of lookups:
 
 ##### Rule the world
 
-    $ tropo -h                                                                                                                                                                                                                          ±[●][master]
     NAME:
-       tropo - kicking ass and taking names
+       tropo - Tropo operations utility
 
     USAGE:
        tropo [global options] command [command options] [arguments...]
 
     VERSION:
-       0.1.0
+       0.2.0
 
     COMMANDS:
        guid     tropo guid 9fb9f0887171a133e4ce14025baa968e
@@ -59,13 +58,13 @@ Types of lookups:
        help, h  Shows a list of commands or help for one command
 
     GLOBAL OPTIONS:
-       --version, -v    print the version
-       --help, -h       show help
+       --config, -c 'hosted'    config to use in ~/.tropo-api.cfg
+       --version, -v        print the version
+       --help, -h           show help
 
 
 ### To do
 
-* Support multiple API's
 * Handle auth errors better, currently its a giant stacktrace
 * Add payment info https://api.aws.tropo.com/rest/v1/users/jdyer/payment/method
 ##### Lookup data

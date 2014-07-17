@@ -8,6 +8,7 @@ import (
 	"github.com/wsxiaoys/terminal"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -15,7 +16,11 @@ func PrintError() {
 	home := fmt.Sprintf("ERROR - Unable to locate api configuration ( %s/.tropo-api.cfg ).\n", UserHomeDir())
 	terminal.Stdout.Color("r").Print(home).Nl().Reset()
 	terminal.Stdout.Color("b").Print("---------------------------------\n").Nl().Reset()
-	fmt.Println("   ; Default api-config\n   ; https://github.com/robfig/config\n   [DEFAULT]\n   host: api.aws.tropo.com\n   route: /rest/v1\n   protocol: https://\n   base-url: %(protocol)s%(host)s%(route)s\n   \n   [hosted]\n   url: %(base-url)s\n   username: <username>\n   password: <password>\n")
+
+	fmt.Println("   ; Default api-config\n   ; https://github.com/robfig/config\n   [DEFAULT]\n   ",
+		"host: api.aws.tropo.com\n   route: /rest/v1\n   protocol: https://\n   base-url: %(protocol)s%(host)s%(route)s",
+		"\n   \n   [hosted]\n   url: %(base-url)s\n   username: <username>\n   password: <password>\n")
+
 	terminal.Stdout.Color("b").Print("---------------------------------\n").Nl().Reset()
 	terminal.Stdout.Color("b").Print("Creating new config now\n").Nl().Reset()
 }
@@ -45,6 +50,13 @@ func CreateConfig() {
 	home := fmt.Sprintf("%s/.tropo-api.cfg", UserHomeDir())
 	c.WriteFile(home, 0600, "Auto generated config")
 
+	clearScreen()
+}
+
+func clearScreen() {
+	o := exec.Command("clear")
+	o.Stdout = os.Stdout
+	o.Run()
 }
 
 func askUserForData(msg, default_value string) string {
@@ -70,6 +82,48 @@ func askUserForData(msg, default_value string) string {
 		}
 	}
 	return str
+}
+
+func GetPapiConfig(section string) (string, string, string) {
+	//section := "hosted"
+	var username, password, url string
+
+	cfg, err := config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", UserHomeDir()))
+	if err != nil {
+		PrintError()
+		CreateConfig()
+		return GetPapiConfig(section)
+	}
+
+	if cfg.HasSection(section) {
+
+		password := validateConfig(cfg, section, "password")
+		username := validateConfig(cfg, section, "username")
+		url := validateConfig(cfg, section, "url")
+
+		return username, password, url
+	} else {
+		logger.Fatal("Unable to find section [ ", section, " ]")
+		os.Exit(1)
+	}
+	return username, password, url
+
+}
+
+// Valudate the config values are not nil and are present
+func validateConfig(config *config.Config, section string, item string) string {
+	value, err := config.String(section, item)
+	if err != nil {
+		terminal.Stdout.Color("r").Print("-- ERROR -- ", err).Nl().Reset()
+		os.Exit(1)
+	}
+
+	if value == "" {
+		str := fmt.Sprintf("-- ERROR -- %s is required but was not found in config", item)
+		terminal.Stdout.Color("r").Print(str).Nl().Reset()
+		os.Exit(1)
+	}
+	return value
 }
 
 func askForProtocol() string {

@@ -1,6 +1,7 @@
 ## 0.2.0
 
 - Auto generate config if missing
+- Support for multiple api's
 
 ## 0.1.3
 
