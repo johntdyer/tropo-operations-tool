@@ -152,8 +152,10 @@ Types of lookups:
     | Partition    | production                                                         |
     +--------------+--------------------------------------------------------------------+
 
-### Multi-tennancy
+### Multiple API Support
 
+
+Tropo can support multiple api endpoints.  You simply need to configure new sections as illustrated below:
 #### Config
 
     [DEFAULT]
@@ -167,21 +169,47 @@ Types of lookups:
     username: jdyer
     password: abc
 
-    [customer1]
-    url: %(protocol)sapi2..tropo.com%(route)s
+    [testing]
+    url: %(protocol)stesting.tropo.com%(route)s
     username: jdyer
     password: abc
 
-    [customer2]
-    url: %(protocol)sapi3..tropo.com%(route)s
+    [development]
+    url: %(protocol)development.tropo.com%(route)s
     username: jdyer
     password: abc
+
+
+Once this is done you can perform the same actions but use a global flag to point to the different backend
+
+    $ tropo --config testing lookup user jdyer                                                                                                                                                                                                                                       ±[master]
+    Results
+    +------------------------+------------------------------+
+    |        PROPERTY        |            VALUE             |
+    +------------------------+------------------------------+
+    | Username               | jdyer                        |
+    | AccountId              | 4                            |
+    | Email                  | nobody@nowhere.com           |
+    | Name                   | n/a n/a                      |
+    | Address                |                              |
+    | JoinDate               | 2012-06-08T20:35:00.000+0000 |
+    | Status                 | locked                       |
+    | PasswordFailedAttempts | 6                            |
+    | Feature Flags          | s,c,u                        |
+    +------------------------+------------------------------+
+
+
 
 ##### Disable SSL validation
 
-Simply add the following at the global level, or per backend
+For some hosts, especially development ones, you want to use a self signed certificiate.  This can be done by simply adding the following flag globally or per backend
 
-     InsecureSkipVerify: true
+    [development]
+    url: %(protocol)splayground.tropo.com%(route)s
+    username: jdyer
+    password: abc
+    InsecureSkipVerify: true
+
 ## Author
 
 [John Dyer]()
