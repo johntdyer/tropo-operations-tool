@@ -85,5 +85,10 @@ var list = cli.Command{
 			Usage:  "List all PPIDs",
 			Action: PrintPpids,
 		},
+		{
+			Name:   "callbacks",
+			Usage:  "List sip codes and their tropo callbacks",
+			Action: PrintCallBacks,
+		},
 	},
 }

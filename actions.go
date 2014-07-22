@@ -14,6 +14,10 @@ func PrintPpids(c *cli.Context) {
 	BuildPpidsTable()
 }
 
+func PrintCallBacks(c *cli.Context) {
+	BuildCallBackTable()
+}
+
 func DecodeSessionID(c *cli.Context) {
 	session := c.Args().First()
 
