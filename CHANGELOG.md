@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Switched to Logurus logger
+
 ## 0.3.0
 
 - Added table for sip response codes and their Tropo callbacks

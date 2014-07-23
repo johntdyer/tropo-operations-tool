@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/op/go-logging"
 	"os"
@@ -10,7 +11,14 @@ import (
 var user, password, rest_api string
 var InsecureSkipVerify = false
 
-var logger = logging.MustGetLogger("tropo")
+//var logger = logging.MustGetLogger("tropo")
+
+var logger = logrus.New()
+
+func init() {
+	logger.Formatter = new(logrus.JSONFormatter)
+	logger.Formatter = new(logrus.TextFormatter) // default
+}
 
 func main() {
 	logging.SetLevel(logging.ERROR, "tropo")
