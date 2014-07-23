@@ -14,8 +14,8 @@ func PrintPpids(c *cli.Context) {
 	BuildPpidsTable()
 }
 
-func PrintCallBacks(c *cli.Context) {
-	BuildCallBackTable()
+func PrintAllCallBacks(c *cli.Context) {
+	BuildSipTable("", true, false)
 }
 
 func DecodeSessionID(c *cli.Context) {
@@ -25,6 +25,18 @@ func DecodeSessionID(c *cli.Context) {
 
 	s := tropo.DecodeSessionId(session)
 	terminal.Stdout.Color("y").Print("Results: ", s.IP).Nl().Reset()
+}
+
+func LookupSipCode(c *cli.Context) {
+	code := c.Args().First()
+	var showAll bool
+	if c.Bool("all") == true {
+		showAll = true
+	} else {
+		showAll = false
+	}
+
+	BuildSipTable(code, showAll, false)
 }
 
 func LookupAddress(c *cli.Context) {

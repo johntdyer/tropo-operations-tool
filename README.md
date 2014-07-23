@@ -17,6 +17,7 @@ Types of lookups:
     * userId
   * Applications
     * applicationId
+  * Sip codes
   * guid
 
 ## Usage

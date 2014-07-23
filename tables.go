@@ -53,25 +53,6 @@ func BuildPpidsTable() {
 
 }
 
-func BuildCallBackTable() {
-	data := [][]string{
-		[]string{"408", "onTimeout"},
-		[]string{"480", "onBusy"},
-		[]string{"486", "onBusy"},
-		[]string{"600", "onBusy"},
-		[]string{"403", "onCallFailure"},
-		[]string{"404", "onCallFailure"},
-		[]string{"410", "onCallFailure"},
-		[]string{"481", "onCallFailure"},
-		[]string{"487", "onCallFailure"},
-		[]string{"500", "onCallFailure"},
-		[]string{"501", "onCallFailure"},
-		[]string{"503", "onCallFailure"},
-		[]string{"504", "onCallFailure"},
-	}
-	renderTable(data)
-}
-
 func BuildFeaturesTable() {
 	data := [][]string{
 		[]string{"s", "Outbound SIP"},

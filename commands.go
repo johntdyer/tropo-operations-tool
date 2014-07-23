@@ -57,6 +57,14 @@ var lookup = cli.Command{
 			},
 			Action: LookupUser,
 		},
+		{
+			Name:  "sip",
+			Usage: "Lookup sip code",
+			Flags: []cli.Flag{
+				cli.BoolFlag{"all, a", "List all codes"},
+			},
+			Action: LookupSipCode,
+		},
 	},
 	Flags: []cli.Flag{
 		cli.StringFlag{"api", "hosted", "Api to use, default `hosted`"},
@@ -88,7 +96,7 @@ var list = cli.Command{
 		{
 			Name:   "callbacks",
 			Usage:  "List sip codes and their tropo callbacks",
-			Action: PrintCallBacks,
+			Action: PrintAllCallBacks,
 		},
 	},
 }
