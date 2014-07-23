@@ -38,9 +38,10 @@ Types of lookups:
     password: abc123
 
 ##### Install Application
-
-    sudo wget https://github.com/johntdyer/tropo/releases/download/v0.2.1/tropo -O /bin/tropo
-    chmod +x /bin/tropo
+    go get github.com/mattn/gom
+    gom install
+    gom build
+    mv tropo /bin/tropo && chmod +x /bin/tropo
     tropo
 
 ##### Rule the world

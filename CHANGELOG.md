@@ -1,3 +1,8 @@
+## 0.3.2
+
+- Switched to gom package mgr
+- Updated readme install instructions
+
 ## 0.3.1
 
 - Switched to Logurus logger
