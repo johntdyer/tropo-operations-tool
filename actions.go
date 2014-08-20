@@ -23,7 +23,7 @@ func DecodeSessionID(c *cli.Context) {
 
 	CheckForRequiredArguments(session, "guid 23b1a72988afe289a11800ce553ab6b6")
 
-	s := tropo.DecodeSessionId(session)
+	s := tropo.DecodeSessionID(session)
 	terminal.Stdout.Color("y").Print("Results: ", s.IP).Nl().Reset()
 }
 

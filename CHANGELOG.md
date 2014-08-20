@@ -1,3 +1,8 @@
+## 0.3.3
+* Updated dependencies
+  * New cli method sig for flags
+  * New log level contstant for logrus
+
 ## 0.3.2
 
 - Switched to gom package mgr

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"github.com/wsxiaoys/terminal"
 	"os"
 	"runtime"
@@ -52,7 +52,7 @@ func SetLoggerLevel(raw_debug string) {
 		}
 
 		if debug_mode {
-			logger.Level = logrus.Debug
+			logger.Level = log.DebugLevel
 		}
 	}
 }

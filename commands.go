@@ -37,10 +37,10 @@ var lookup = cli.Command{
 			Name:  "application",
 			Usage: "Lookup information on an application",
 			Flags: []cli.Flag{
-				cli.BoolFlag{"addresses, a", "Include all mapped addresses"},
-				cli.BoolFlag{"pin, p", "Include mapped pins"},
-				cli.BoolFlag{"tokens, t", "Include mapped tokens"},
-				cli.BoolFlag{"numbers, n", "Include mapped numbers"},
+				cli.BoolFlag{Name: "addresses, a", Usage: "Include all mapped addresses"},
+				cli.BoolFlag{Name: "pin, p", Usage: "Include mapped pins"},
+				cli.BoolFlag{Name: "tokens, t", Usage: "Include mapped tokens"},
+				cli.BoolFlag{Name: "numbers, n", Usage: "Include mapped numbers"},
 			},
 			Action: LookupApplication,
 		},
@@ -53,7 +53,7 @@ var lookup = cli.Command{
 			Name:  "user",
 			Usage: "Lookup a user data",
 			Flags: []cli.Flag{
-				cli.BoolFlag{"applications, a", "Include users applications"},
+				cli.BoolFlag{Name: "applications, a", Usage: "Include users applications"},
 			},
 			Action: LookupUser,
 		},
@@ -61,13 +61,13 @@ var lookup = cli.Command{
 			Name:  "sip",
 			Usage: "Lookup sip code",
 			Flags: []cli.Flag{
-				cli.BoolFlag{"all, a", "List all codes"},
+				cli.BoolFlag{Name: "all, a", Usage: "List all codes"},
 			},
 			Action: LookupSipCode,
 		},
 	},
 	Flags: []cli.Flag{
-		cli.StringFlag{"api", "hosted", "Api to use, default `hosted`"},
+		cli.StringFlag{Name: "api", Value: "hosted", Usage: "Api to use, default `hosted`"},
 	},
 }
 
