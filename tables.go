@@ -41,10 +41,8 @@ func BuildPpidsTable() {
 		[]string{"Vegas FiServ Messaging", "1123", "Dedicated Production"},
 		[]string{"Orlando FiServ Voice", "832", "Dedicated Production"},
 		[]string{"Orlando FiServ Messaging", "833", "Dedicated Production"},
-		//[]string{"Las Vegas OPower Voice", "947", "Dedicated Production"},
-		//[]string{"Las Vegas OPower Messaging", "948", "Dedicated Production"},
-		//[]string{"Orlando oPower Voice", "1072", "Dedicated Production"},
-		//[]string{"Orlando oPower Messaging", "1073", "Dedicated Production"},
+		[]string{"WDC Production", "1124", "WDC Production"},
+		[]string{"WDC Staging", "1125", "WDC Staging"},
 	}
 	table.AppendBulk(data)
 
