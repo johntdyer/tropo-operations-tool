@@ -84,6 +84,8 @@ func BuildAddressTable(papi PapiAddressResponse) {
 		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeId)},
 		[]string{"ApplicationId", strconv.Itoa(papi.ApplicationId)},
 		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
+		[]string{"OwnerId", strconv.Itoa(papi.OwnerId)},
+		[]string{"Owner", papi.Owner},
 	}
 
 	renderTable(data)

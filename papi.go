@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -66,6 +67,11 @@ func GetAddressData(username, password, url, address string) (string, PapiAddres
 
 	var data PapiAddressResponse
 	err = json.Unmarshal(bodyText, &data)
+
+	// https://api.connect.tropo.com/rest/v1/users/jherbst  --> jherbst
+	if data.Owner != "" {
+		data.Owner = strings.SplitAfter(data.Owner, "users/")[1]
+	}
 
 	if err != nil {
 		logger.Error("GetAddressData PAPI Response: %s", bodyText)

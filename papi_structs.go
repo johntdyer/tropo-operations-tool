@@ -53,6 +53,8 @@ type PapiAddressResponse struct {
 	SmsRateLimit        int
 	ExchangeId          int
 	ApplicationId       int
+	OwnerId             int
+	Owner               string
 	RequireVerification bool
 }
 
