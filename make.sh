@@ -24,3 +24,5 @@ else
 fi
 
 
+chmod +x builds/tot.osx
+chmod +x builds/tot.linux
