@@ -3,7 +3,7 @@ CGO_ENABLED=0
 
 echo "Building Tropo Operations Tool"
 # Build for OSX
-go build -o builds/tot.osx tot.go papi.go papi_structs.go utils.go config.go commands.go actions.go address_helper.go sip.go tables.go version.go
+gb -o builds/tot.osx tot.go papi.go papi_structs.go utils.go config.go commands.go actions.go address_helper.go sip.go tables.go version.go
 if [ $? -eq 0 ]; then
   echo "Success Build artifact - builds/tot.osx"
 else

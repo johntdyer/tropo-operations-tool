@@ -16,21 +16,21 @@ func assert(err error) {
 	}
 }
 
-// tropo lookup address 4075551212 --user --application
-// tropo lookup address 99999999   --user --application
-// tropo lookup address abc123     --user --application
-// tropo lookup appplication 1234  --addresses
+// tot lookup address 4075551212 --user --application
+// tot lookup address 99999999   --user --application
+// tot lookup address abc123     --user --application
+// tot lookup appplication 1234  --addresses
 
-// tropo guid abc123
-// tropo check dns 4075551212
+// tot guid abc123
+// tot check dns 4075551212
 
-// tropo lookup user abc123
-// tropo lookup user abc123 --addresses
-// tropo lookup user abc123 --applications --addresses
+// tot lookup user abc123
+// tot lookup user abc123 --addresses
+// tot lookup user abc123 --applications --addresses
 
 var lookup = cli.Command{
 	Name:        "lookup",
-	Usage:       "tropo lookup 9fb9f0887171a133e4ce14025baa968e",
+	Usage:       "tot lookup 9fb9f0887171a133e4ce14025baa968e",
 	Description: `Lookup info on token or session guid`,
 	Subcommands: []cli.Command{
 		{
@@ -73,14 +73,14 @@ var lookup = cli.Command{
 
 var guid = cli.Command{
 	Name:        "guid",
-	Usage:       "tropo guid 9fb9f0887171a133e4ce14025baa968e",
+	Usage:       "tot guid 9fb9f0887171a133e4ce14025baa968e",
 	Description: `Decode runtime IP address from session guid`,
 	Action:      DecodeSessionID,
 }
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       "tropo list features",
+	Usage:       "tot list features",
 	Description: ``,
 	Subcommands: []cli.Command{
 		{
