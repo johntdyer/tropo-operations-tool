@@ -75,7 +75,6 @@ func BuildAddressTable(papi PapiAddressResponse) {
 		[]string{"DisplayNumber", papi.DisplayNumber},
 		[]string{"ServiceId", papi.ServiceId},
 		[]string{"City", papi.City},
-		[]string{"State", papi.State},
 		[]string{"Country", papi.Country},
 		[]string{"ProviderName", papi.ProviderName},
 		[]string{"SmsEnabled", strconv.FormatBool(papi.SmsEnabled)},
@@ -84,8 +83,18 @@ func BuildAddressTable(papi PapiAddressResponse) {
 		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeId)},
 		[]string{"ApplicationId", strconv.Itoa(papi.ApplicationId)},
 		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
-		[]string{"OwnerId", strconv.Itoa(papi.OwnerId)},
-		[]string{"Owner", papi.Owner},
+	}
+
+	if papi.OwnerId == 0 {
+		data = append(data, []string{"OwnerId", "none"})
+	}
+
+	if papi.State != "" {
+		data = append(data, []string{"State", papi.State})
+	}
+
+	if papi.Owner != "" {
+		data = append(data, []string{"Owner", papi.Owner})
 	}
 
 	renderTable(data)
