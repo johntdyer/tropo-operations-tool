@@ -81,7 +81,6 @@ func BuildAddressTable(papi PapiAddressResponse) {
 		[]string{"ExcludeFromBilling", strconv.FormatBool(papi.ExcludeFromBilling)},
 		[]string{"SmsRateLimit", strconv.Itoa(papi.SmsRateLimit)},
 		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeId)},
-		[]string{"ApplicationId", strconv.Itoa(papi.ApplicationId)},
 		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
 	}
 
@@ -97,6 +96,48 @@ func BuildAddressTable(papi PapiAddressResponse) {
 		data = append(data, []string{"Owner", papi.Owner})
 	}
 
+	if papi.ApplicationId != 0 {
+
+		_, papi := GetAppData(user, password, rest_api, strconv.Itoa(papi.ApplicationId))
+		data = append(data, []string{"", ""})
+		data = append(data, []string{"AppId", papi.Id})
+		data = append(data, []string{"UserId", strconv.Itoa(papi.UserId)})
+		data = append(data, []string{"App Name", papi.Name})
+		data = append(data, []string{"Platform", papi.Platform})
+		data = append(data, []string{"Environment", papi.Environment})
+		data = append(data, []string{"MessagingUrl", papi.MessagingUrl})
+		data = append(data, []string{"VoiceUrl", papi.VoiceUrl})
+		data = append(data, []string{"Partition", papi.Partition})
+
+		_, userData := GetUserData(user, password, rest_api, strconv.Itoa(papi.UserId))
+		features := GetUserFeatures(user, password, rest_api, strconv.Itoa(papi.UserId))
+
+		fullName := []string{userData.FirstName, userData.LastName}
+		address := []string{userData.Address, userData.Address2, userData.State}
+
+		data = append(data, []string{"Username", userData.Username})
+		data = append(data, []string{"AccountId", userData.Id})
+		data = append(data, []string{"Email", userData.Email})
+		data = append(data, []string{"Name", strings.Join(fullName, " ")})
+
+		if len(address) == 0 {
+			data = append(data, []string{"Address", strings.Join(address, "\n")})
+		}
+
+		data = append(data, []string{"JoinDate", userData.JoinDate})
+		data = append(data, []string{"Status", userData.Status})
+		data = append(data, []string{"PasswordFailedAttempts", strconv.Itoa(userData.PasswordFailedAttempts)})
+		data = append(data, []string{"Feature Flags", strings.Join(features, ",")})
+
+		if userData.Notes != "" {
+			data = append(data, []string{"", ""})
+			clean_response := RemoveNewLines(userData.Notes, " ")
+			data = append(data, []string{"Notes", clean_response})
+		}
+
+		// // []string{clean_response}
+
+	}
 	renderTable(data)
 }
 
@@ -158,11 +199,14 @@ func BuildUserTable(papi PapiUserResponse, features []string) {
 		[]string{"AccountId", papi.Id},
 		[]string{"Email", papi.Email},
 		[]string{"Name", strings.Join(fullName, " ")},
-		[]string{"Address", strings.Join(address, "\n")},
 		[]string{"JoinDate", papi.JoinDate},
 		[]string{"Status", papi.Status},
 		[]string{"PasswordFailedAttempts", strconv.Itoa(papi.PasswordFailedAttempts)},
 		[]string{"Feature Flags", strings.Join(features, ",")},
+	}
+
+	if len(address) == 0 {
+		data = append(data, []string{"Address", strings.Join(address, "\n")})
 	}
 
 	renderTable(data)
