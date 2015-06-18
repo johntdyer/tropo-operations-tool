@@ -70,18 +70,32 @@ func BuildAddressTable(papi PapiAddressResponse) {
 
 	data := [][]string{
 		[]string{"Type", papi.Type},
-		[]string{"Prefix", papi.Prefix},
-		[]string{"Number", papi.Number},
-		[]string{"DisplayNumber", papi.DisplayNumber},
 		[]string{"ServiceId", papi.ServiceId},
-		[]string{"City", papi.City},
-		[]string{"Country", papi.Country},
-		[]string{"ProviderName", papi.ProviderName},
 		[]string{"SmsEnabled", strconv.FormatBool(papi.SmsEnabled)},
 		[]string{"ExcludeFromBilling", strconv.FormatBool(papi.ExcludeFromBilling)},
 		[]string{"SmsRateLimit", strconv.Itoa(papi.SmsRateLimit)},
 		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeId)},
 		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
+	}
+
+	if papi.Prefix != "" {
+		data = append(data, []string{"Prefix", papi.Prefix})
+	}
+
+	if papi.DisplayNumber != "" {
+		data = append(data, []string{"DisplayNumber", papi.DisplayNumber})
+	}
+
+	if papi.City != "" {
+		data = append(data, []string{"City", papi.City})
+	}
+
+	if papi.Country != "" {
+		data = append(data, []string{"Country", papi.Country})
+	}
+
+	if papi.ProviderName != "" {
+		data = append(data, []string{"ProviderName", papi.ProviderName})
 	}
 
 	if papi.OwnerId == 0 {
