@@ -61,6 +61,8 @@ type Address struct {
 	ExchangeID          int
 	ApplicationID       int
 	RequireVerification bool
+	OwnerID             int    `json:"ownerId"`
+	Owner               string `json:"owner"`
 }
 
 // PapiFeaturesResponse structs

@@ -109,6 +109,93 @@ func buildAddressTable(data Address) {
 	table.Render()
 }
 
+func buildAddressTable2(papi Address) {
+
+	data := [][]string{
+		[]string{"Type", papi.Type},
+		[]string{"ServiceId", papi.ServiceID},
+		[]string{"SmsEnabled", strconv.FormatBool(papi.SmsEnabled)},
+		[]string{"ExcludeFromBilling", strconv.FormatBool(papi.ExcludeFromBilling)},
+		[]string{"SmsRateLimit", strconv.Itoa(papi.SmsRateLimit)},
+		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeID)},
+		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
+	}
+
+	if papi.Prefix != "" {
+		data = append(data, []string{"Prefix", papi.Prefix})
+	}
+
+	if papi.DisplayNumber != "" {
+		data = append(data, []string{"DisplayNumber", papi.DisplayNumber})
+	}
+
+	if papi.City != "" {
+		data = append(data, []string{"City", papi.City})
+	}
+
+	if papi.Country != "" {
+		data = append(data, []string{"Country", papi.Country})
+	}
+
+	if papi.ProviderName != "" {
+		data = append(data, []string{"ProviderName", papi.ProviderName})
+	}
+
+	// if papi.OwnerID == 0 {
+	// 	data = append(data, []string{"OwnerId", "none"})
+	// }
+
+	if papi.State != "" {
+		data = append(data, []string{"State", papi.State})
+	}
+
+	if papi.OwnerID != 0 {
+		data = append(data, []string{"Owner", strconv.Itoa(papi.OwnerID)})
+	}
+
+	if papi.ApplicationID != 0 {
+
+		_, papi := getAppData(strconv.Itoa(papi.ApplicationID))
+		data = append(data, []string{"", ""})
+		data = append(data, []string{"AppId", papi.ID})
+		data = append(data, []string{"UserId", strconv.Itoa(papi.UserID)})
+		data = append(data, []string{"App Name", papi.Name})
+		data = append(data, []string{"Platform", papi.Platform})
+		data = append(data, []string{"Environment", papi.Environment})
+		data = append(data, []string{"MessagingUrl", papi.MessagingURL})
+		data = append(data, []string{"VoiceUrl", papi.VoiceURL})
+		data = append(data, []string{"Partition", papi.Partition})
+
+		_, userData := getUserData(strconv.Itoa(papi.UserID))
+		features := getUserFeatures(strconv.Itoa(papi.UserID))
+
+		fullName := []string{userData.FirstName, userData.LastName}
+		address := []string{userData.Address, userData.Address2, userData.State}
+
+		data = append(data, []string{"Username", userData.Username})
+		data = append(data, []string{"AccountId", userData.ID})
+		data = append(data, []string{"Email", userData.Email})
+		data = append(data, []string{"Name", strings.Join(fullName, " ")})
+
+		if len(address) == 0 {
+			data = append(data, []string{"Address", strings.Join(address, "\n")})
+		}
+
+		data = append(data, []string{"JoinDate", userData.JoinDate})
+		data = append(data, []string{"Status", userData.Status})
+		data = append(data, []string{"PasswordFailedAttempts", strconv.Itoa(userData.PasswordFailedAttempts)})
+		data = append(data, []string{"Feature Flags", strings.Join(features, ",")})
+
+		if userData.Notes != "" {
+			data = append(data, []string{"", ""})
+			cleanResponse := removeNewLines(userData.Notes, " ")
+			data = append(data, []string{"Notes", cleanResponse})
+		}
+
+	}
+	renderTable(data)
+}
+
 func buildApplicationsTable(apps Applications) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"ID", "Name", "  Environment  ", "VoiceURL"})

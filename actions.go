@@ -1,8 +1,6 @@
 package main
 
 import (
-	"strconv"
-
 	"bitbucket.org/voxeolabs/go-tropo-utils"
 	"github.com/codegangsta/cli"
 	"github.com/wsxiaoys/terminal"
@@ -13,16 +11,16 @@ func addressLookupAction(address string) {
 	str, addressData := getAddressData(address)
 	logger.Debug("Address Response: ", str)
 	terminal.Stdout.Color("y").Print("Results").Nl().Reset()
-	buildAddressTable(addressData)
+	buildAddressTable2(addressData)
 
-	if addressData.ApplicationID != 0 {
-		_, appData := getAppData(strconv.Itoa(addressData.ApplicationID))
-		features := getUserFeatures(strconv.Itoa(appData.UserID))
-		_, userData := getUserData(strconv.Itoa(appData.UserID))
-
-		buildApplicationTable(appData)
-		buildUserTable(userData, features)
-	}
+	// if addressData.ApplicationID != 0 {
+	// 	_, appData := getAppData(strconv.Itoa(addressData.ApplicationID))
+	// 	features := getUserFeatures(strconv.Itoa(appData.UserID))
+	// 	_, userData := getUserData(strconv.Itoa(appData.UserID))
+	//
+	// 	buildApplicationTable(appData)
+	// 	buildUserTable(userData, features)
+	// }
 }
 
 // sipCodeLookupAction
