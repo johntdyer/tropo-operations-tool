@@ -1,7 +1,7 @@
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 
-BINARY=tropo-operations-tool
+BINARY=tot
 
 VERSION=$(shell cat version.go | awk '{FS="="}{print $2}' | sed 's_"__g')
 
@@ -10,7 +10,6 @@ LDFLAGS=-ldflags "-X main.Build=`git rev-parse HEAD`"
 .DEFAULT_GOAL: $(BINARY)
 
 packages/$(BINARY): $(SOURCES)
-		# go build ${LDFLAGS} -o packages/${BINARY} spark-pd-oncall.go pagerduty.go spark.go version.go file-utils.go
 		gox \
 		-osarch="!darwin/386"    \
 		-osarch="!linux/386"     \

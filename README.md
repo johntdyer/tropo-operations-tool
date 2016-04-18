@@ -1,4 +1,4 @@
-tropo
+tot
 
 ====
 
@@ -27,8 +27,8 @@ Types of lookups:
     ; Default api-config
     ; https://github.com/robfig/config
     [DEFAULT]
-    host: api.aws.tropo.com
-    route: /rest/v1
+    host: api.tropo.com
+    route: /v1
     protocol: https://
     base-url: %(protocol)s%(host)s%(route)s
 
@@ -47,10 +47,10 @@ Types of lookups:
 ##### Rule the world
 
     NAME:
-       tropo - Tropo operations utility
+       tot - Tropo operations utility
 
     USAGE:
-       tropo [global options] command [command options] [arguments...]
+       tot [global options] command [command options] [arguments...]
 
     VERSION:
        0.2.0
@@ -70,13 +70,13 @@ Types of lookups:
 ### To do
 
 * Handle auth errors better, currently its a giant stacktrace
-* Add payment info https://api.aws.tropo.com/rest/v1/users/jdyer/payment/method
+* Add payment info https://api.tropo.com/v1/users/jdyer/payment/method
 ##### Lookup data
 
 
 ###### Lookup Features
 
-    $ tropo list features                                                                                                                                                                                                                             ±[●][master]
+    $ tot list features                                                                                                                                                                                                                             ±[●][master]
     +----------+------------------------------+
     | PROPERTY |            VALUE             |
     +----------+------------------------------+
@@ -93,12 +93,12 @@ Types of lookups:
 
 ###### Decode sessionGUID
 
-     $ tropo guid 9fb9f0887171a133e4ce14025baa968e
+     $ tot guid 9fb9f0887171a133e4ce14025baa968e
      Results: 10.6.69.185
 
 ###### Address
 
-    tropo lookup address +14433058696
+    $ tot lookup address +14433058696
     Results
     +---------------------+-----------------+
     |      PROPERTY       |      VALUE      |
@@ -122,7 +122,7 @@ Types of lookups:
 
 ###### User
 
-    tropo lookup user jdyer
+    $ tot lookup user jdyer
     Results
     +------------------------+--------------------------------+
     |        PROPERTY        |             VALUE              |
@@ -141,7 +141,7 @@ Types of lookups:
 
 ###### Application
 
-    $ tropo lookup application 5032272
+    $ tot lookup application 5032272
     Results
     +--------------+--------------------------------------------------------------------+
     |   PROPERTY   |                               VALUE                                |
@@ -150,9 +150,9 @@ Types of lookups:
     | UserId       | 12345                                                              |
     | App Name     | ppid832                                                            |
     | Platform     | scripting                                                          |
-    | Environment  | http://api.aws.tropo.com/rest/v1/environments/461                  |
+    | Environment  | http://api.tropo.com/v1/environments/461                  |
     | MessagingUrl | https://dl.dropboxusercontent.com/u/1234/TROPO/app.rb              |
-    | VoiceUrl     | https://dl.dropboxusercontent.com/u/177285/TROPO/appMsg.rb         |
+    | VoiceUrl     | https://dl.dropboxusercontent.com/u/1234/TROPO/appMsg.rb         |
     | Partition    | production                                                         |
     +--------------+--------------------------------------------------------------------+
 
@@ -163,8 +163,8 @@ Tropo can support multiple api endpoints.  You simply need to configure new sect
 #### Config
 
     [DEFAULT]
-    host: api.aws.tropo.com
-    route: /rest/v1
+    host: api.tropo.com
+    route: /v1
     protocol: https://
     base-url: %(protocol)s%(host)s%(route)s
 
@@ -186,7 +186,7 @@ Tropo can support multiple api endpoints.  You simply need to configure new sect
 
 Once this is done you can perform the same actions but use a global flag to point to the different backend
 
-    $ tropo --config testing lookup user jdyer                                                                                                                                                                                                                                       ±[master]
+    $ tot --config testing lookup user jdyer                                                                                                                                                                                                                                       ±[master]
     Results
     +------------------------+------------------------------+
     |        PROPERTY        |            VALUE             |
@@ -206,7 +206,7 @@ Once this is done you can perform the same actions but use a global flag to poin
 
 ##### Disable SSL validation
 
-For some hosts, especially development ones, you want to use a self signed certificiate.  This can be done by simply adding the following flag globally or per backend
+For some hosts, especially development ones, you want to use a self signed certificate.  This can be done by simply adding the following flag globally or per backend
 
     [development]
     url: %(protocol)splayground.tropo.com%(route)s
