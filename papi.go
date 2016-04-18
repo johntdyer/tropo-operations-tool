@@ -1,21 +1,25 @@
 package main
 
 import (
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+
 	"strings"
 )
 
-func provisioningApiRequest(u, p, url string) ([]byte, error) {
+func fullAPIURL(url string) ([]byte, error) {
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: InsecureSkipVerify},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: tropoAppConfig.API.InsecureSkipVerify},
 	}
 
 	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest("GET", url, nil)
-	req.SetBasicAuth(u, p)
+	req.SetBasicAuth(tropoAppConfig.Credentials.Username, tropoAppConfig.Credentials.Password)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -24,12 +28,13 @@ func provisioningApiRequest(u, p, url string) ([]byte, error) {
 
 	bodyText, err := ioutil.ReadAll(resp.Body)
 
-	clean_response := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
+	cleanedResponse := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
 
-	logger.Debug("URL: %s || Response: %s [ code: %d ]", url, clean_response, resp.StatusCode)
+	logger.Debug("URL: %s || Response: %s [ code: %d ]", url, cleanedResponse, resp.StatusCode)
 
 	if err != nil {
-		logger.Error("provisioningApiRequest PAPI Response: %s", bodyText)
+		r, _ := "provisioningApiRequest PAPI Response: %s", bodyText
+		logger.Error(r)
 		panic(err.Error())
 	}
 
@@ -43,15 +48,149 @@ func provisioningApiRequest(u, p, url string) ([]byte, error) {
 	return bodyText, err
 }
 
-func GetAppData(username, password, url, application string) (string, PapiApplicationResponse) {
-	fullApiUrl := []string{url, "/applications/", application}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+func provisioningAPIPost(url string, postData []byte) ([]byte, error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: tropoAppConfig.API.InsecureSkipVerify},
+	}
 
-	var data PapiApplicationResponse
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(postData))
+	req.SetBasicAuth(tropoAppConfig.Credentials.Username, tropoAppConfig.Credentials.Password)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	bodyText, err := ioutil.ReadAll(resp.Body)
+
+	cleanedResponse := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
+	str := fmt.Sprintf("URL: %s || Response: %s [ code: %d ]", url, cleanedResponse, resp.StatusCode)
+	logger.Debug(str) //"URL: %s || Response: %s [ code: %d ]", url, clean_response, resp.StatusCode)
+
+	if err != nil {
+		r, _ := "provisioningApiPost response: %s", bodyText
+		logger.Error(r)
+		panic(err.Error())
+	}
+
+	if resp.StatusCode == 404 {
+		logger.Fatal("Not found")
+	}
+
+	if resp.StatusCode == 401 {
+		logger.Fatal("Authentication error")
+	}
+	return bodyText, err
+}
+
+func provisioningAPIGet(url string) ([]byte, error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: tropoAppConfig.API.InsecureSkipVerify},
+	}
+
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("GET", url, nil)
+	req.SetBasicAuth(tropoAppConfig.Credentials.Username, tropoAppConfig.Credentials.Password)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	bodyText, err := ioutil.ReadAll(resp.Body)
+
+	cleanedResponse := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
+	str := fmt.Sprintf("URL: %s || Response: %s [ code: %d ]", url, cleanedResponse, resp.StatusCode)
+	logger.Debug(str) //"URL: %s || Response: %s [ code: %d ]", url, clean_response, resp.StatusCode)
+
+	if err != nil {
+		r, _ := "provisioningApiGET response: %s", bodyText
+		logger.Error(r)
+		panic(err.Error())
+	}
+
+	if resp.StatusCode == 404 {
+		logger.Fatal("Not found")
+	}
+
+	if resp.StatusCode == 401 {
+		logger.Fatal("Authentication error")
+	}
+	return bodyText, err
+}
+
+func provisioningAPIDelete(u, p, url string) ([]byte, error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: tropoAppConfig.API.InsecureSkipVerify},
+	}
+
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("DELETE", url, nil)
+	req.SetBasicAuth(tropoAppConfig.Credentials.Username, tropoAppConfig.Credentials.Password)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	bodyText, err := ioutil.ReadAll(resp.Body)
+
+	cleanedResponse := strings.Replace(string(strings.Replace(string(bodyText), " ", "", -1)), "\n", "", -1)
+	str := fmt.Sprintf("URL: %s || Response: %s [ code: %d ]", url, cleanedResponse, resp.StatusCode)
+	logger.Debug(str) //"URL: %s || Response: %s [ code: %d ]", url, clean_response, resp.StatusCode)
+
+	if err != nil {
+		r, _ := "provisioningApiPost response: %s", bodyText
+		logger.Error(r)
+		panic(err.Error())
+	}
+
+	if resp.StatusCode == 404 {
+		logger.Fatal("Not found")
+	}
+
+	if resp.StatusCode == 401 {
+		logger.Fatal("Authentication error")
+	}
+	return bodyText, err
+}
+
+// curl -v -H "Content-Type: application/json" -X POST -d '{"feature":"3","featureFlag":"i"}' api.admin:x@localhost:8080/rest/v1/users/pengyongqian/features
+func getAppData(applicationID string) (string, Application) {
+	fullAPIURL := []string{tropoAppConfig.API.Protocol, tropoAppConfig.API.URL, "/applications/", applicationID}
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
+
+	var data Application
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
-		logger.Error("GetAppData PAPI Response: %s", bodyText)
+		r, _ := "GetAppData PAPI Response: %s", bodyText
+		logger.Error(r)
+		panic(err.Error())
+	}
+	_, user := getUserData(strconv.Itoa(data.UserID))
+	data.UserData = user
+	str := string(bodyText)
+	return str, data
+}
+
+func getAddressData(address string) (string, Address) {
+
+	fullAPIURL := []string{tropoAppConfig.API.URL, "/addresses/", addressType(address), "/", address}
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
+
+	var data Address
+	err = json.Unmarshal(bodyText, &data)
+
+	if err != nil {
+		r, _ := "GetAddressData PAPI Response: %s", bodyText
+		logger.Error(r)
 		panic(err.Error())
 	}
 
@@ -59,33 +198,17 @@ func GetAppData(username, password, url, application string) (string, PapiApplic
 	return str, data
 }
 
-func GetAddressData(username, password, url, address string) (string, PapiAddressResponse) {
-
-	fullApiUrl := []string{url, "/addresses/", AddressType(address), "/", address}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
-
-	var data PapiAddressResponse
-	err = json.Unmarshal(bodyText, &data)
-
-	if err != nil {
-		logger.Error("GetAddressData PAPI Response: %s", bodyText)
-		panic(err.Error())
-	}
-
-	str := string(bodyText)
-	return str, data
-}
-
-func GetUserData(username, password, apiUrl, accountName string) (string, PapiUserResponse) {
+func getUserData(accountName string) (string, User) {
 	logger.Debug("Looking up user - %s", accountName)
-	fullApiUrl := []string{apiUrl, "/users/", string(accountName)}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+	fullAPIURL := []string{tropoAppConfig.API.URL, "/users/", string(accountName)}
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
 	logger.Debug("PAPI Response: %s", bodyText)
-	var data PapiUserResponse
+	var data User
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
-		logger.Error("GetUserData PAPI Response: %s", bodyText)
+		r, _ := "GetUserData PAPI Response: %s", bodyText
+		logger.Error(r)
 		panic(err.Error())
 	}
 
@@ -93,43 +216,46 @@ func GetUserData(username, password, apiUrl, accountName string) (string, PapiUs
 	return str, data
 }
 
-func GetUsersApplications(username, password, apiUrl, accountName string) Applications {
+func getUsersApplications(accountName string) Applications {
 	logger.Debug("Looking up user's applications - %s", accountName)
-	fullApiUrl := []string{apiUrl, "/users/", string(accountName), "/applications"}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+	fullAPIURL := []string{tropoAppConfig.API.URL, "/users/", string(accountName), "/applications"}
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
 
 	var data Applications
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
-		logger.Error("GetUsersApplications PAPI Response: %s", bodyText)
+		r, _ := "GetUsersApplications PAPI Response: %s", bodyText
+		logger.Error(r)
 		panic(err.Error())
 	}
 
 	return data
 }
 
-func GetApplicationAddresses(username, password, apiUrl, application string) ApplicationAddresses {
+func getApplicationAddresses(application string) ApplicationAddresses {
 	logger.Debug("Looking up addresses for applications - %s", application)
-	fullApiUrl := []string{apiUrl, "/applications/", string(application), "/addresses"}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+	fullAPIURL := []string{tropoAppConfig.API.URL, "/applications/", string(application), "/addresses"}
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
 
 	var data ApplicationAddresses
 	err = json.Unmarshal(bodyText, &data)
 
 	if err != nil {
-		logger.Error("GetApplicationAddresses PAPI Response: %s", bodyText)
+		r, _ := "GetApplicationAddresses PAPI Response: %s", bodyText
+		logger.Error(r)
 		panic(err.Error())
 	}
 
 	return data
 }
 
-func GetUserFeatures(username, password, apiUrl, accountName string) []string {
-	logger.Debug("Looking up accountName - %s", accountName)
+func getUserFeatures(accountName string) []string {
+	logger.Debugf("Looking up accountName - %s", accountName)
 
-	fullApiUrl := []string{apiUrl, "/users/", accountName, "/features"}
-	bodyText, err := provisioningApiRequest(username, password, strings.Join(fullApiUrl, ""))
+	fullAPIURL := []string{tropoAppConfig.API.URL, "/users/", accountName, "/features"}
+
+	bodyText, err := provisioningAPIGet(strings.Join(fullAPIURL, ""))
 
 	var data PapiFeaturesResponse
 	err = json.Unmarshal(bodyText, &data)
@@ -137,7 +263,8 @@ func GetUserFeatures(username, password, apiUrl, accountName string) []string {
 	if err != nil {
 		panic(err.Error())
 	}
-	logger.Debug("Features list: ", data)
+
+	logger.Debugf("Features list: %+v ", data)
 
 	str := []string{}
 	for _, v := range data {
