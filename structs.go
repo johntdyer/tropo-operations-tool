@@ -1,8 +1,11 @@
 package main
 
-type Config struct {
-	Api struct {
-		Url string
+// ApplicationConfig global config
+type ApplicationConfig struct {
+	API struct {
+		Protocol           string
+		URL                string
+		InsecureSkipVerify bool
 	}
 	Credentials struct {
 		Username string
@@ -10,21 +13,24 @@ type Config struct {
 	}
 }
 
-type PapiApplicationResponse struct {
-	Id                     string
+// Application structs
+type Application struct {
+	ID                     string
 	Name                   string
 	Platform               string
-	VoiceEnvironmentId     string
-	MessagingEnvironmentId string
-	MessagingUrl           string
-	VoiceUrl               string
+	VoiceEnvironmentID     string
+	MessagingEnvironmentID string
+	MessagingURL           string
+	VoiceURL               string
 	Environment            string
 	Partition              string
-	UserId                 int
+	UserID                 int
+	UserData               User
 }
 
-type PapiUserResponse struct {
-	Id                     string
+// User structs
+type User struct {
+	ID                     string
 	Address                string
 	Address2               string
 	Username               string
@@ -38,12 +44,13 @@ type PapiUserResponse struct {
 	PasswordFailedAttempts int
 }
 
-type PapiAddressResponse struct {
+// Address structs
+type Address struct {
 	Type                string
 	Prefix              string
 	Number              string
 	DisplayNumber       string
-	ServiceId           string
+	ServiceID           string
 	City                string
 	State               string
 	Country             string
@@ -51,11 +58,12 @@ type PapiAddressResponse struct {
 	SmsEnabled          bool
 	ExcludeFromBilling  bool
 	SmsRateLimit        int
-	ExchangeId          int
-	ApplicationId       int
+	ExchangeID          int
+	ApplicationID       int
 	RequireVerification bool
 }
 
+// PapiFeaturesResponse structs
 type PapiFeaturesResponse []struct {
 	Href        string `json:"href"`
 	Feature     string `json:"feature"`
@@ -63,13 +71,13 @@ type PapiFeaturesResponse []struct {
 	FeatureFlag string `json:"featureFlag"`
 }
 
-type FeaturesList []struct {
-	Href        string
-	Id          string
-	Name        string
-	Description string
+// Feature struct
+type Feature []struct {
+	ID                       int
+	FeatureFlag, FeatureName string
 }
 
+// ApplicationAddresses struct
 type ApplicationAddresses []struct {
 	Type                string
 	Prefix              string
@@ -78,7 +86,7 @@ type ApplicationAddresses []struct {
 	Address             string
 	Token               string
 	DisplayNumber       string
-	ServiceId           string
+	ServiceID           string
 	City                string
 	State               string
 	Country             string
@@ -86,24 +94,25 @@ type ApplicationAddresses []struct {
 	SmsEnabled          bool
 	ExcludeFromBilling  bool
 	SmsRateLimit        int
-	ExchangeId          int
-	ApplicationId       int
+	ExchangeID          int
+	ApplicationID       int
 	RequireVerification bool
 }
 
+// Applications struct
 type Applications []struct {
 	Href                      string
-	Id                        string
+	ID                        string
 	Name                      string
 	Platform                  string
-	VoiceEnvironmentId        string
-	VoiceUrl                  string
-	MessagingEnvironmentId    string
-	MessagingUrl              string
+	VoiceEnvironmentID        string
+	VoiceURL                  string
+	MessagingEnvironmentID    string
+	MessagingURL              string
 	Environment               string
 	EventNotificationEnabled  bool
 	ResultNotificationEnabled bool
-	UserId                    int
+	UserID                    int
 	User                      string
 	Partition                 string
 }
