@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/olekukonko/tablewriter"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/fatih/structs"
+	"github.com/olekukonko/tablewriter"
 )
 
 func renderTable(data [][]string) {
@@ -16,7 +19,7 @@ func renderTable(data [][]string) {
 	table.Render() // Send output
 }
 
-func BuildPpidsTable() {
+func buildPpidsTable() {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Name", "ppid", "Environment"})
 	table.SetRowSeparator("-")
@@ -41,10 +44,6 @@ func BuildPpidsTable() {
 		[]string{"Vegas FiServ Messaging", "1123", "Dedicated Production"},
 		[]string{"Orlando FiServ Voice", "832", "Dedicated Production"},
 		[]string{"Orlando FiServ Messaging", "833", "Dedicated Production"},
-		//[]string{"Las Vegas OPower Voice", "947", "Dedicated Production"},
-		//[]string{"Las Vegas OPower Messaging", "948", "Dedicated Production"},
-		//[]string{"Orlando oPower Voice", "1072", "Dedicated Production"},
-		//[]string{"Orlando oPower Messaging", "1073", "Dedicated Production"},
 	}
 	table.AppendBulk(data)
 
@@ -53,7 +52,17 @@ func BuildPpidsTable() {
 
 }
 
-func BuildFeaturesTable() {
+// func buildUserFeaturesTable(s PapiFeaturesResponse) [][]string {
+// 	data := [][]string{}
+// 	for _, i := range s {
+// 		// value := []string{i.Feature, i.FeatureFlag}
+// 		data = append(data, []string{i.Feature, i.FeatureFlag})
+// 	}
+// 	return data
+// }
+
+func buildFeaturesTable() {
+
 	data := [][]string{
 		[]string{"s", "Outbound SIP"},
 		[]string{"b", "SIP Bang Syntax"},
@@ -68,30 +77,39 @@ func BuildFeaturesTable() {
 	renderTable(data)
 }
 
-func BuildAddressTable(papi PapiAddressResponse) {
+func buildAddressTable(data Address) {
 
-	data := [][]string{
-		[]string{"Type", papi.Type},
-		[]string{"Prefix", papi.Prefix},
-		[]string{"Number", papi.Number},
-		[]string{"DisplayNumber", papi.DisplayNumber},
-		[]string{"ServiceId", papi.ServiceId},
-		[]string{"City", papi.City},
-		[]string{"State", papi.State},
-		[]string{"Country", papi.Country},
-		[]string{"ProviderName", papi.ProviderName},
-		[]string{"SmsEnabled", strconv.FormatBool(papi.SmsEnabled)},
-		[]string{"ExcludeFromBilling", strconv.FormatBool(papi.ExcludeFromBilling)},
-		[]string{"SmsRateLimit", strconv.Itoa(papi.SmsRateLimit)},
-		[]string{"ExchangeId", strconv.Itoa(papi.ExchangeId)},
-		[]string{"ApplicationId", strconv.Itoa(papi.ApplicationId)},
-		[]string{"RequireVerification", strconv.FormatBool(papi.RequireVerification)},
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetHeader([]string{"Key", "Value"})
+
+	fields := structs.New(data).Fields()
+
+	for _, f := range fields {
+		if (f.Name() == "ServiceId" || f.Name() == "ApplicationId") && f.IsZero() {
+			continue
+		}
+		value := ""
+		switch f.Kind() {
+		case reflect.Bool:
+			value = strconv.FormatBool(f.Value().(bool))
+		case reflect.Int, reflect.Int32, reflect.Int64:
+			value = strconv.Itoa(f.Value().(int))
+		case reflect.String:
+			value = f.Value().(string)
+		}
+
+		table.Append([]string{
+			f.Name(),
+			value,
+		})
+
 	}
 
-	renderTable(data)
+	table.Render()
 }
 
-func BuildApplicationsTable(apps Applications) {
+func buildApplicationsTable(apps Applications) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"ID", "Name", "  Environment  ", "VoiceURL"})
 	table.SetRowSeparator("-")
@@ -99,19 +117,19 @@ func BuildApplicationsTable(apps Applications) {
 	//table.SetColWidth(200)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	for _, v := range apps {
-		ppids := fmt.Sprintf("v: %s - m: %s", v.VoiceEnvironmentId, v.MessagingEnvironmentId)
+		ppids := fmt.Sprintf("v: %s - m: %s", v.VoiceEnvironmentID, v.MessagingEnvironmentID)
 		table.Append([]string{
-			v.Id,
+			v.ID,
 			v.Name,
 			ppids,
-			strings.Join([]string{v.VoiceUrl, v.MessagingUrl}, "\n"),
+			strings.Join([]string{v.VoiceURL, v.MessagingURL}, "\n"),
 		})
 
 	}
 	table.Render() // Send output
 }
 
-func BuildApplicationAddressesTable(addresses ApplicationAddresses) {
+func buildApplicationAddressesTable(addresses ApplicationAddresses) {
 
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Type", "Address", "Channel", "ServiceID"})
@@ -135,51 +153,64 @@ func BuildApplicationAddressesTable(addresses ApplicationAddresses) {
 			channel = v.Channel
 		}
 
-		table.Append([]string{v.Type, address, channel, v.ServiceId})
+		table.Append([]string{v.Type, address, channel, v.ServiceID})
 	}
 	table.Render() // Send output
 }
 
-func BuildUserTable(papi PapiUserResponse, features []string) {
+func buildUserTable(papi User, features []string) {
 	fullName := []string{papi.FirstName, papi.LastName}
-	address := []string{papi.Address, papi.Address2, papi.State}
 
 	data := [][]string{
 		[]string{"Username", papi.Username},
-		[]string{"AccountId", papi.Id},
+		[]string{"AccountId", papi.ID},
 		[]string{"Email", papi.Email},
 		[]string{"Name", strings.Join(fullName, " ")},
-		[]string{"Address", strings.Join(address, "\n")},
 		[]string{"JoinDate", papi.JoinDate},
 		[]string{"Status", papi.Status},
 		[]string{"PasswordFailedAttempts", strconv.Itoa(papi.PasswordFailedAttempts)},
 		[]string{"Feature Flags", strings.Join(features, ",")},
 	}
 
+	if papi.Address != "" && papi.State != "" {
+		data = append(data, []string{"Address", strings.Join([]string{papi.Address, papi.Address2, papi.State}, "\n")})
+	}
+
 	renderTable(data)
 
 	if papi.Notes != "" {
-		clean_response := RemoveNewLines(papi.Notes, " ") //, "\r", " ", -1), "\n", " ", -1)
+		cleanedResponse := removeNewLines(papi.Notes, " ")
 
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetHeader([]string{"Notes"})
 		table.SetAlignment(tablewriter.ALIGN_LEFT)
-		table.Append([]string{clean_response})
+		table.Append([]string{cleanedResponse})
 		table.Render() // Send output
 	}
 }
 
-func BuildApplicationTable(papi PapiApplicationResponse) {
+func buildApplicationTable(papi Application) {
+	u := fmt.Sprintf("%s - [%s]", strconv.Itoa(papi.UserID), papi.UserData.Username)
+
 	data := [][]string{
-		[]string{"AppId", papi.Id},
-		[]string{"UserId", strconv.Itoa(papi.UserId)},
+		[]string{"User", u},
+		[]string{"AppId", papi.ID},
 		[]string{"App Name", papi.Name},
 		[]string{"Platform", papi.Platform},
 		[]string{"Environment", papi.Environment},
-		[]string{"MessagingUrl", papi.MessagingUrl},
-		[]string{"VoiceUrl", papi.VoiceUrl},
+		[]string{"MessagingUrl", papi.MessagingURL},
+		[]string{"VoiceUrl", papi.VoiceURL},
 		[]string{"Partition", papi.Partition},
 	}
-
 	renderTable(data)
+
+	// Add notes
+	if papi.UserData.Notes != "" {
+		cleanedResponse := removeNewLines(papi.UserData.Notes, " ")
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{"Notes"})
+		table.SetAlignment(tablewriter.ALIGN_LEFT)
+		table.Append([]string{cleanedResponse})
+		table.Render() // Send output
+	}
 }
