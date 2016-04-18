@@ -1,18 +1,20 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/wsxiaoys/terminal"
+	"fmt"
 	"os"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/robfig/config"
+	"github.com/wsxiaoys/terminal"
 )
 
 // Tries to find out when this binary was compiled.
 // Returns the current time if it fails to find it.
-func CompileTime() time.Time {
+func compileTime() time.Time {
 	info, err := os.Stat(os.Args[0])
 	if err != nil {
 		return time.Now()
@@ -20,7 +22,32 @@ func CompileTime() time.Time {
 	return info.ModTime()
 }
 
-func UserHomeDir() string {
+func (ac *ApplicationConfig) setConfig(section string) error {
+	cfg, err := config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", userHomeDir()))
+
+	if err != nil {
+		printError()
+		createConfig()
+
+		// Read config again
+		cfg, err = config.ReadDefault(fmt.Sprintf("%s/.tropo-api.cfg", userHomeDir()))
+		if err != nil {
+			printError()
+		}
+	}
+
+	if cfg.HasSection(section) {
+		ac.Credentials.Password = validateConfig(cfg, section, "password")
+		ac.Credentials.Username = validateConfig(cfg, section, "username")
+		ac.API.URL = validateConfig(cfg, section, "url")
+		ac.API.InsecureSkipVerify, _ = cfg.Bool(section, "insecureSkipVerify")
+		return nil
+	}
+	return fmt.Errorf("Unable to find config section '%s'", section)
+
+}
+
+func userHomeDir() string {
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
 		if home == "" {
@@ -31,28 +58,21 @@ func UserHomeDir() string {
 	return os.Getenv("HOME")
 }
 
-func RemoveNewLines(str, replace string) string {
+func removeNewLines(str, replace string) string {
 	return strings.Replace(strings.Replace(str, "\r", replace, -1), "\n", replace, -1)
 }
 
-func CheckForRequiredArguments(arg, msg string) {
+func checkForRequiredArguments(arg, msg string) {
 	if arg == "" {
 		terminal.Stdout.Color("r").Print("-- ERROR -- Missing argument").Nl().Reset()
-		terminal.Stdout.Color("b").Print("  Example: \n    tropo %s", msg).Nl().Reset()
+		f, _ := "  Example: \n    tropo %s", msg
+		terminal.Stdout.Color("b").Print(f).Nl().Reset()
 		os.Exit(0)
 	}
 }
 
-func SetLoggerLevel(raw_debug string) {
-	// Debug mode
-	if raw_debug != "" {
-		debug_mode, err := strconv.ParseBool(raw_debug)
-		if err != nil {
-			logger.Fatal(err)
-		}
-
-		if debug_mode {
-			logger.Level = log.DebugLevel
-		}
+func setLoggerLevel(debugMode bool) {
+	if debugMode {
+		logger.Level = log.DebugLevel
 	}
 }
